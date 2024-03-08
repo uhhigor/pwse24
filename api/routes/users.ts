@@ -1,68 +1,92 @@
 import express from 'express';
 const router = express.Router();
 
-import userManager from '../auth/UserManager';
-import mongoose from 'mongoose';
 import {StatusCodes} from "http-status-codes";
+import User from "../auth/models/User";
+import mongoose from "mongoose";
 
-// GET all users
-router.get('/', async function(req: any, res: any, next: any) {
-    await userManager.getAllUsers((err, users) => {
-        if (err) {
-            res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(err.message);
+// POST new user
+router.post('/', function(req: any, res: any, next: any) {
+    const { name, surname, email, password } = req.body;
+    if (!name || !surname || !email || !password
+        || name === "" || surname === "" || email === "" || password === "") {
+        return res.status(StatusCodes.BAD_REQUEST).send("Missing parameters");
+    }
+    User.findOne({ email: req.body.email }).then((user) => {
+        if (user) {
+            return res.status(StatusCodes.BAD_REQUEST).send("User with specified email already exists.");
+        }
+    });
+    User.create(req.body).then((user) => {
+        return res.status(StatusCodes.CREATED).send(user);
+    }).catch((err) => {
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(err.message);
+    });
+});
+
+// GET user by id, returns user
+
+router.get('/:id', function(req: any, res: any, next: any) {
+    if(!mongoose.isValidObjectId(req.params.id)) {
+        return res.status(StatusCodes.BAD_REQUEST).send("Invalid id");
+    }
+    User.findById(req.params.id).then((user) => {
+        if (user) {
+            return res.status(StatusCodes.OK).send(user);
         } else {
-            res.status(StatusCodes.OK).send(users);
+            return res.status(StatusCodes.NOT_FOUND).send("User not found");
         }
+    }).catch((err) => {
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(err.message);
     });
 });
 
-// GET a user by id
+// GET all users, returns array of users
 
-router.get('/:id', async function(req: any, res: any, next: any) {
-    await userManager.getUserById(req.params.id, (err, user) => {
-        if (err) {
-            res.status(StatusCodes.NOT_FOUND).send(err.message);
+router.get('/', function(req: any, res: any, next: any) {
+    User.find().then((users) => {
+        return res.status(StatusCodes.OK).send(users);
+    }).catch((err) => {
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(err.message);
+    });
+});
+
+// PUT update user, returns user before update
+
+router.put('/:id', function(req: any, res: any, next: any) {
+    if(!mongoose.isValidObjectId(req.params.id)) {
+        return res.status(StatusCodes.BAD_REQUEST).send("Invalid id");
+    }
+    const { name, surname, email, password } = req.body;
+    if (!name || !surname || !email || !password
+        || name === "" || surname === "" || email === "" || password === "") {
+        return res.status(StatusCodes.BAD_REQUEST).send("Missing parameters");
+    }
+    User.findByIdAndUpdate(req.params.id, req.body).then((user) => {
+        if (user) {
+            return res.status(StatusCodes.OK).send(user);
         } else {
-            res.status(StatusCodes.OK).send(user);
+            return res.status(StatusCodes.NOT_FOUND).send("User not found");
         }
+    }).catch((err) => {
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(err.message);
     });
 });
 
-// POST a new user
-
-router.post('/', async function(req: any, res: any, next: any) {
-    await userManager.createUser(req.body, (err, user) => {
-        if (err) {
-            res.status(StatusCodes.BAD_REQUEST).send(err.message);
-        } else {
-            res.status(StatusCodes.CREATED).send(user);
-        }
-    });
-});
-
-// PUT update a user
-
-router.put('/:id', async function(req: any, res: any, next: any) {
-    await userManager.updateUser(req.params.id, req.body, (err, user) => {
-        if (err) {
-            res.status(StatusCodes.BAD_REQUEST).send(err.message);
-        }
-        else {
-            res.status(StatusCodes.OK).send(user);
-        }
-    });
-});
-
-// DELETE a user
+// DELETE user, returns user before deletion
 
 router.delete('/:id', async function(req: any, res: any, next: any) {
-    await userManager.deleteUser(req.params.id, (err, user) => {
-        if (err) {
-            res.status(StatusCodes.BAD_REQUEST).send(err.message);
+    if(!mongoose.isValidObjectId(req.params.id)) {
+        return res.status(StatusCodes.BAD_REQUEST).send("Invalid id");
+    }
+    User.findByIdAndDelete(req.params.id).then((user) => {
+        if (user) {
+            return res.status(StatusCodes.OK).send(user);
+        } else {
+            return res.status(StatusCodes.NOT_FOUND).send("User not found");
         }
-        else {
-            res.status(StatusCodes.OK).send(user);
-        }
+    }).catch((err) => {
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(err.message);
     });
 });
 
