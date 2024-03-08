@@ -1,9 +1,11 @@
-const express = require('express');
-const path = require('path');
+import express from 'express';
+import path from 'path';
 
-const cookieParser = require('cookie-parser');
-const logger = require('morgan');
+import cookieParser from 'cookie-parser';
+import logger from 'morgan';
 const router = require('express').Router;
+
+import database_connect from './database/db';
 
 
 // Routes
@@ -21,5 +23,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+
+database_connect();
+
 
 module.exports = app;
