@@ -43,14 +43,19 @@ router.post('/register', function(req: any, res: any, next: any) {
         if (user) {
             return res.status(StatusCodes.BAD_REQUEST).send("User with specified email already exists.");
         }
+        else {
+            hashPassword(password).then((hash) => {
+                User.create({name, surname, email, password: hash}).then((user) => {
+                    return res.status(StatusCodes.CREATED).send(user);
+                }).catch((err) => {
+                    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(err.message);
+                });
+            }).catch((err) => {
+                return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(err.message);
+            });
+        }
     });
-    hashPassword(password).then((hash) => {
-        User.create({name, surname, email, password: hash}).then((user) => {
-            return res.status(StatusCodes.CREATED).send(user);
-        }).catch((err) => {
-            return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(err.message);
-        });
-    }).catch((err) => {
-        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(err.message);
-    });
+
 });
+
+module.exports = router;

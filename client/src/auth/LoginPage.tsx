@@ -1,4 +1,6 @@
 import React from 'react';
+import $ from "jquery";
+import axios from "axios";
 
 function LoginPage() {
     return (
@@ -6,7 +8,7 @@ function LoginPage() {
             <h1>Login</h1>
             <form>
                 <div>
-                    <label htmlFor="email">Username</label>
+                    <label htmlFor="email">Email</label>
                     <input type="text" id="email" name="email" />
                 </div>
                 <div>
@@ -23,25 +25,17 @@ function requestLogin(event: any) {
     event.preventDefault();
     const email = $("#email")
     const password = $("#password")
-    if (email.length === 0 || password.length === 0) {
+    if (email.length !== 0 || password.length !== 0) {
         const data = {
-            username: email,
-            password: password
+            email: email.val(),
+            password: password.val()
+
         };
-        fetch("localhost:5005/users/login", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(data)
-        }).then((response) => {
-            if (response.status === 200) {
-                window.location.href = "/";
-            } else {
-                alert("Invalid email or password");
-            }
-        }).catch((error) => {
-            alert("Error: " + error);
+        axios.post("http://localhost:3000/auth/login", data)
+            .then((response) => {
+                console.log(response.data);
+        }).catch((err) => {
+            console.log("Error: " + err.response.data);
         });
     }
 }
