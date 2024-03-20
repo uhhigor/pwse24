@@ -19,7 +19,8 @@ let authRouter = require('./routes/auth.ts');
 
 const app = express();
 app.use(cors({
-    origin: 'http://localhost:5005'
+    origin: 'http://localhost:5005',
+    credentials: true
 }));
 app.use(logger('dev'));
 app.use(express.json());

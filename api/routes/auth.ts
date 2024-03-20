@@ -17,7 +17,8 @@ router.post('/login', function(req: any, res: any, next: any) {
             comparePassword(password, user.password).then((result) => {
                 if (result) {
                     let token = generateToken(user.email, user.role);
-                    return res.status(StatusCodes.OK).send(token);
+                    res.cookie('token', token, { httpOnly: true })
+                    return res.status(StatusCodes.OK).send("Logged in");
                 } else {
                     return res.status(StatusCodes.BAD_REQUEST).send("Invalid email or password");
                 }
