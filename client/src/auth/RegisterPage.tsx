@@ -43,7 +43,7 @@ function requestRegister(event: any) {
             name: name.val(),
             surname: surname.val()
         };
-        axios.post("http://localhost:3000/auth/register", data).then((response) => {
+        axios.post(process.env.REACT_APP_API_ADDRESS + "/auth/register", data).then((response) => {
             console.log(response.data);
         }).catch((err) => {
             console.log("Error: " + err.response.data);

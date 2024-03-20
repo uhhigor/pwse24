@@ -29,9 +29,8 @@ function requestLogin(event: any) {
         const data = {
             email: email.val(),
             password: password.val()
-
         };
-        axios.post("http://localhost:3000/auth/login", data)
+        axios.post(process.env.REACT_APP_API_ADDRESS + "/auth/login", data)
             .then((response) => {
                 console.log(response.data);
         }).catch((err) => {
