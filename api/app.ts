@@ -3,10 +3,11 @@ import path from 'path';
 
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
+import dotenv from 'dotenv';
 const router = require('express').Router;
 
 import database_connect from './database/db';
-
+dotenv.config();
 
 // Routes
 
