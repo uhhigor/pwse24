@@ -1,10 +1,10 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import './style/App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import LoginPage from "./auth/LoginPage";
-import RegisterPage from "./auth/RegisterPage";
-import TaskPage from './tasks/TaskPage';
+import LoginPage from "./pages/auth/LoginPage";
+import RegisterPage from "./pages/auth/RegisterPage";
+import TaskPage from './pages/tasks/TaskPage';
+import MainPage from './pages/other/MainPage';
 import axios from "axios";
 import { Dashboard } from './admin/Dashboard';
 
@@ -18,6 +18,7 @@ function App() {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/tasks" element={<TaskPage />} />
+            <Route path="/" element={<MainPage />} />
             <Route path="/dashboard" element={<Dashboard />} />
           </Routes>
         </header>
