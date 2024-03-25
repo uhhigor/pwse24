@@ -2,6 +2,7 @@ import $ from "jquery";
 import axios from "axios";
 import React, { useState, SyntheticEvent } from 'react';
 import { Link } from 'react-router-dom';
+import "../../style/TaskPage.css";
 
 type Task = {
     name: string;
@@ -29,44 +30,24 @@ const TaskPage: React.FC = () => {
 
     return (
         <div className="TaskPage">
-            <h1>Tasks</h1>
-            <form>
+            <div className="content">
+            <h2>Add new task</h2>
+            <form className="form">
                 <div>
                     <label htmlFor="name">Name</label>
-                    <input type="text" id="name" name="name" />
+                    <input type="text" id="name" name="name" className="inputBox"/>
                 </div>
                 <div>
                     <label htmlFor="description">Description</label>
-                    <input type="text" id="description" name="description" />
+                    <input type="text" id="description" name="description" className="inputBox"/>
                 </div>
                 <div>
                     <label htmlFor="deadline">Deadline</label>
-                    <input type="text" id="deadline" name="deadline" />
+                    <input type="text" id="deadline" name="deadline" className="inputBox"/>
                 </div>
-                <button onClick={createTask}>Create Task</button>
+                <button onClick={createTask} className="btn btn-lg mt-4 createTaskButton">Create Task</button>
             </form>
-
-            <table>
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Description</th>
-                        <th>Deadline</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {tasks.map((task, index) => (
-                        <tr key={index}>
-                            <td>{task.name}</td>
-                            <td>{task.description}</td>
-                            <td>{task.deadline.toLocaleDateString()}</td>
-                            <td>
-                                <Link to={`/tasks/${index}`}>Complete the task</Link>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+            </div>
         </div>
     )
 }

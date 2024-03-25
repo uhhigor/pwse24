@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react"
-import { useNavigate } from "react-router-dom";
-import { FaCode, FaClipboardList, FaUser, FaPencil, FaTrashCan } from "react-icons/fa6";
+import React, {useEffect, useState} from "react"
+import {useNavigate} from "react-router-dom";
+import {FaCode, FaClipboardList, FaUser, FaPencil, FaTrashCan} from "react-icons/fa6";
 import '../../style/Dashboard.css'
 import data from './exampleData.json'
 
@@ -21,14 +21,12 @@ export const Dashboard = () => {
         setAmountOfTest(count);
     }, [tasks])
 
-    function handleRowClick(task: any)
-    {
+    function handleRowClick(task: any) {
         setShowedDescription(task.description)
         setShowedTest(task.tests);
     }
 
-    function handleAddProblem()
-    {
+    function handleAddProblem() {
         navigate("/tasks");
     }
 
@@ -38,7 +36,7 @@ export const Dashboard = () => {
                 <div className="col-4">
                     <div className="widget-container">
                         <div className="icon">
-                            <FaCode />
+                            <FaCode/>
                         </div>
                         <div className="title">
                             <span>Problems</span>
@@ -51,7 +49,7 @@ export const Dashboard = () => {
                 <div className="col-4">
                     <div className="widget-container">
                         <div className="icon">
-                            <FaClipboardList />
+                            <FaClipboardList/>
                         </div>
                         <div className="title">
                             <span>Tests</span>
@@ -64,7 +62,7 @@ export const Dashboard = () => {
                 <div className="col-4">
                     <div className="widget-container">
                         <div className="icon">
-                            <FaUser />
+                            <FaUser/>
                         </div>
                         <div className="title">
                             <span>Users</span>
@@ -77,19 +75,19 @@ export const Dashboard = () => {
             </div>
             <div className="row mt-5">
                 <div className="col-8">
-                <div className='table-responsive'>
-                    <table className='table table-borderless'>
-                        <thead>
+                    <div className='table-responsive'>
+                        <table className='table table-borderless'>
+                            <thead>
                             <tr>
                                 <th scope='col'>#</th>
                                 <th scope='col'>Name</th>
                                 <th scope='col'>Difficulty</th>
                                 <th scope='col'>Date</th>
                                 <th scope='col'>Deadline</th>
-                                <th scope='col'> </th>
+                                <th scope='col'></th>
                             </tr>
-                        </thead>
-                        <tbody>
+                            </thead>
+                            <tbody>
                             {
                                 tasks.map((task: any) => {
                                     return (
@@ -102,28 +100,28 @@ export const Dashboard = () => {
                                             <td>{task.date}</td>
                                             <td>{task.deadline}</td>
                                             <td>
-                                                <FaPencil />
+                                                <FaPencil/>
                                                 &nbsp;
-                                                <FaTrashCan />
+                                                <FaTrashCan/>
                                             </td>
                                         </tr>
                                     )
                                 })
-                            }                           
-                        </tbody>
-                    </table>
+                            }
+                            </tbody>
+                        </table>
                     </div>
                 </div>
 
                 <div className="col-4">
                     <div className="row m-lg-0">
-                        <button 
+                        <button
                             disabled={showedDescription === ""}
                             className="btn col-6 tab-btn m-1"
                             onClick={() => setActiveTab('description')}>
                             Description
                         </button>
-                        <button 
+                        <button
                             disabled={!showedTests}
                             className="btn col-5 tab-btn m-1"
                             onClick={() => setActiveTab('tests')}>
@@ -142,15 +140,15 @@ export const Dashboard = () => {
                     {activeTab === 'tests' && (
                         <div className="tests">
                             <ul>
-                            {showedTests!.map((test: any) => {
-                                return (
+                                {showedTests!.map((test: any) => {
+                                    return (
                                         <li>{test.name}</li>
-                                )
-                            })}
+                                    )
+                                })}
                             </ul>
                         </div>
                     )}
-                    
+
                 </div>
 
             </div>
@@ -158,8 +156,8 @@ export const Dashboard = () => {
             <div className="row">
                 <div className="col-8">
                     <div
-                    onClick={handleAddProblem}
-                    className="btn btn-success">
+                        onClick={handleAddProblem}
+                        className="btn tab-btn">
                         Add Problem
                     </div>
                 </div>
