@@ -4,7 +4,7 @@
 /* tabs: #24201c */
 
 div.dashboard-container {
-    width: 100%;
+    width: 100vh;
     height: 100vh;
 }
 
@@ -14,6 +14,7 @@ div.dashboard-container div.row {
 
 div.dashboard-container div.row:nth-child(1) {
     justify-content: center;
+    : center;
 }
 
 div.dashboard-container div.row div.widget-container {
@@ -69,8 +70,9 @@ div.dashboard-container div.row div.table-responsive table.table tr:active {
 }
 
 div.dashboard-container div.row button.tab-btn {
-    background-color: #2c2834;
+    background-color: #579169;
     color: #f0f9ff;
+    border-radius: 5px;
 }
 
 div.dashboard-container div.row div.description {
@@ -93,5 +95,6 @@ div.dashboard-container div.row div.tests {
 
 div.dashboard-container div.row div div.btn {
     margin-left: 20px;
-    width: -webkit-fill-available;
+    width: 95%;
+    align-self: center;
 }

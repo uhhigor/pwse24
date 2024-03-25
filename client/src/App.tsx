@@ -6,7 +6,7 @@ import RegisterPage from "./pages/auth/RegisterPage";
 import TaskPage from './pages/tasks/TaskPage';
 import MainPage from './pages/other/MainPage';
 import axios from "axios";
-import { Dashboard } from './admin/Dashboard';
+import { Dashboard } from './pages/admin/Dashboard';
 
 axios.defaults.withCredentials = true;
 function App() {

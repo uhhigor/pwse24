@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom";
 import { FaCode, FaClipboardList, FaUser, FaPencil, FaTrashCan } from "react-icons/fa6";
-import './style/Dashboard.css'
+import '../../style/Dashboard.css'
 import data from './exampleData.json'
 
 export const Dashboard = () => {
@@ -35,7 +35,7 @@ export const Dashboard = () => {
     return (
         <div className="dashboard-container">
             <div className="row">
-                <div className="col-3">
+                <div className="col-4">
                     <div className="widget-container">
                         <div className="icon">
                             <FaCode />
@@ -48,7 +48,7 @@ export const Dashboard = () => {
                         </div>
                     </div>
                 </div>
-                <div className="col-3">
+                <div className="col-4">
                     <div className="widget-container">
                         <div className="icon">
                             <FaClipboardList />
@@ -61,7 +61,7 @@ export const Dashboard = () => {
                         </div>
                     </div>
                 </div>
-                <div className="col-3">
+                <div className="col-4">
                     <div className="widget-container">
                         <div className="icon">
                             <FaUser />
@@ -75,7 +75,6 @@ export const Dashboard = () => {
                     </div>
                 </div>
             </div>
-            
             <div className="row mt-5">
                 <div className="col-8">
                 <div className='table-responsive'>
@@ -117,16 +116,16 @@ export const Dashboard = () => {
                 </div>
 
                 <div className="col-4">
-                    <div className="row">
+                    <div className="row m-lg-0">
                         <button 
                             disabled={showedDescription === ""}
-                            className="btn col-5 tab-btn"
+                            className="btn col-6 tab-btn m-1"
                             onClick={() => setActiveTab('description')}>
                             Description
                         </button>
                         <button 
                             disabled={!showedTests}
-                            className="btn col-5 tab-btn"
+                            className="btn col-5 tab-btn m-1"
                             onClick={() => setActiveTab('tests')}>
                             Tests
                         </button>
