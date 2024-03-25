@@ -1,7 +1,7 @@
 import $ from "jquery";
 import axios from "axios";
-import React, { useState, SyntheticEvent } from 'react';
-import { Link } from 'react-router-dom';
+import React, {useState, SyntheticEvent} from 'react';
+import {Link} from 'react-router-dom';
 import "../../style/TaskPage.css";
 
 type Task = {
@@ -30,23 +30,58 @@ const TaskPage: React.FC = () => {
 
     return (
         <div className="TaskPage">
-            <div className="content">
-            <h2>Add new task</h2>
-            <form className="form">
-                <div>
-                    <label htmlFor="name">Name</label>
-                    <input type="text" id="name" name="name" className="inputBox"/>
+            <div className="row">
+                <div className="col">
+                    <div className="content">
+                        <h2>Add new task</h2>
+                        <form className="form">
+                            <div>
+                                <label htmlFor="name">Name</label>
+                                <input type="text" id="name" name="name" className="inputBox"/>
+                            </div>
+                            <div>
+                                <label htmlFor="description">Description</label>
+                                <input type="text" id="description" name="description" className="inputBox"/>
+                            </div>
+                            <div>
+                                <label htmlFor="deadline">Deadline</label>
+                                <input type="date" id="deadline" name="deadline" className="inputBox"/>
+                            </div>
+                            <button onClick={createTask} className="btn btn-lg mt-4 createTaskButton">Create Task
+                            </button>
+                        </form>
+                    </div>
                 </div>
-                <div>
-                    <label htmlFor="description">Description</label>
-                    <input type="text" id="description" name="description" className="inputBox"/>
+            </div>
+
+            <div className="row">
+                <div className="col">
+                    <div className="table-container">
+                        <h2>Tasks</h2>
+                        <table className=" table table-striped table-bordered table-dark">
+                            <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Description</th>
+                                <th>Deadline</th>
+                                <th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {tasks.map((task, index) => (
+                                <tr key={index}>
+                                    <td>{task.name}</td>
+                                    <td>{task.description}</td>
+                                    <td>{task.deadline.toLocaleDateString()}</td>
+                                    <td>
+                                        <Link to={`/tasks/${index}`}>Complete the task</Link>
+                                    </td>
+                                </tr>
+                            ))}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-                <div>
-                    <label htmlFor="deadline">Deadline</label>
-                    <input type="text" id="deadline" name="deadline" className="inputBox"/>
-                </div>
-                <button onClick={createTask} className="btn btn-lg mt-4 createTaskButton">Create Task</button>
-            </form>
             </div>
         </div>
     )
