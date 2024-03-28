@@ -8,3 +8,12 @@ services:
         - action: sync
           path: ./api/.
           target: /home/node/app
+  frontend:
+    build: ./client
+    ports:
+      - "3001:3000"
+    develop:
+      watch:
+        - action: sync
+          path: ./client
+          target: /home/node/app
