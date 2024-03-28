@@ -1,0 +1,10 @@
+services:
+  backend:
+    build: ./api/.
+    ports:
+      - "3000:3000"
+    develop:
+      watch:
+        - action: sync
+          path: ./api/.
+          target: /home/node/app
