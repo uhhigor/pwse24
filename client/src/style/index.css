@@ -1,0 +1,20 @@
+body {
+    color: white;
+    font-size: 60px;
+    text-align: center;
+    background-image: url('../resources/bcg2.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 90vw;
+    height: 90vh;
+    font-family: "Chakra Petch", sans-serif !important; /* Increase specificity */
+/*    add font linked in index html*/
+
+
+}
+
+/*code {*/
+/*  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',*/
+/*    monospace;*/
+/*}*/
