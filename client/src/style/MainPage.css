@@ -1,0 +1,28 @@
+.MainPage {
+    color: white;
+    font-size: 60px;
+}
+
+@keyframes flash {
+    0% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+.welcomeText {
+    animation: flash 2s linear infinite;
+}
+
+.paused {
+    animation-play-state: paused;
+}
+
+.btn:hover .MainPage {
+    animation: flash 1s linear infinite;
+}

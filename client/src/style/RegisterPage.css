@@ -1,0 +1,61 @@
+.RegisterPage {
+    width: 400px;
+    height: 600px;
+    background: #494f56;
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.9);
+    color: white;
+}
+
+.content {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.content .form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    font-size: 20px;
+}
+
+.content form .inputBox {
+    position: relative;
+    width: 100%;
+}
+
+form .login {
+    display: flex;
+    justify-content: left;
+    width: 20%;
+}
+
+form .login:hover {
+    text-decoration: underline;
+}
+
+form .registerButton {
+    width: 100%;
+    padding: 10px;
+    font-size: 18px;
+    background: #4e85d0;
+    border: none;
+    border-bottom: 2px solid #007bff;
+    color: white;
+    outline: none;
+}
+
+form .registerButton:hover {
+    background: #007bff;
+}
