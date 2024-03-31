@@ -27,7 +27,11 @@ const userSchema = new Schema({
     createdAt: {
         type: Date,
         default: Date.now
-    }
+    },
+    tasksSolutions: [{
+        type: Schema.Types.ObjectId,
+        ref: 'TaskSolution'
+    }]
 });
 
 export default mongoose.model('User', userSchema);
