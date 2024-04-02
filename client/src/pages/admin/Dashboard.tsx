@@ -82,7 +82,7 @@ export const Dashboard = () => {
 
     return (
         <div className="dashboard-container">
-            <div className="row">
+            <div className="row m-5">
                 <div className="col-4">
                     <div className="widget-container">
                         <div className="icon">

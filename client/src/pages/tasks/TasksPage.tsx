@@ -2,7 +2,7 @@ import $ from "jquery";
 import axios from "axios";
 import React, {useState, SyntheticEvent} from 'react';
 import {Link} from 'react-router-dom';
-import "../../style/TaskPage.css";
+import "../../style/TasksPage.css";
 
 type Task = {
     name: string;
@@ -10,7 +10,7 @@ type Task = {
     deadline: Date;
 };
 
-const TaskPage: React.FC = () => {
+const TasksPage: React.FC = () => {
     const [tasks, setTasks] = useState<Task[]>([]);
 
     const createTask = (event: SyntheticEvent) => {
@@ -74,7 +74,7 @@ const TaskPage: React.FC = () => {
                                     <td>{task.description}</td>
                                     <td>{task.deadline.toLocaleDateString()}</td>
                                     <td>
-                                        <Link to={`/tasks/${index}`}>Complete the task</Link>
+                                        <Link to={`/tasks/${index}`}>Solve the problem</Link>
                                     </td>
                                 </tr>
                             ))}
@@ -116,4 +116,4 @@ const TaskPage: React.FC = () => {
 //     }
 // }
 
-export default TaskPage;
+export default TasksPage;
