@@ -28,36 +28,33 @@ export const Dashboard = () => {
     useEffect(() => {
         axios.get(process.env.REACT_APP_API_ADDRESS + "/admin/tasks")
             .then((response) => {
-                if (response.status === 401) {
-                    navigate('/login');
-                } else {
-                    setTasks(response.data);
-                }
+                setTasks(response.data);
             })
             .catch((err) => {
                 console.error(err);
+                if (err.response.status === 401) {
+                    navigate('/login');
+                }
             });
         axios.get(process.env.REACT_APP_API_ADDRESS + "/admin/tests")
             .then((response) => {
-                if (response.status === 401) {
-                    navigate('/login');
-                } else {
-                    setTests(response.data);
-                }
+                setTests(response.data);
             })
             .catch((err) => {
                 console.error(err);
+                if (err.response.status === 401) {
+                    navigate('/login');
+                }
             });
         axios.get(process.env.REACT_APP_API_ADDRESS + "/users/")
             .then((response) => {
-                if (response.status === 401) {
-                    navigate('/login');
-                } else {
-                    setUsers(response.data);
-                }
+                setUsers(response.data);
             })
             .catch((err) => {
                 console.error(err);
+                if (err.response.status === 401) {
+                    navigate('/login');
+                }
             });
     }, [])
 
