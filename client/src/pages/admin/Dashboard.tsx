@@ -2,32 +2,85 @@ import React, {useEffect, useState} from "react"
 import {useNavigate} from "react-router-dom";
 import {FaCode, FaClipboardList, FaUser, FaPencil, FaTrashCan} from "react-icons/fa6";
 import '../../style/Dashboard.css'
-import data from './exampleData.json'
+import axios from "axios";
+import { AddProblemForm } from "./AddProblemForm";
+import { EditProblemForm } from "./EditProblemForm";
+import { TestPopup } from "./TestPopup";
 
 export const Dashboard = () => {
 
-    const [tasks, setTasks] = useState(data.problems);
-    const [amountOfTests, setAmountOfTest] = useState(0);
-    const [showedDescription, setShowedDescription] = useState("");
-    const [showedTests, setShowedTest] = useState<any>(null);
-    const [activeTab, setActiveTab] = useState('description');
     const navigate = useNavigate();
 
+    const [tasks, setTasks] = useState<any>([]);
+    const [tests, setTests] = useState<any>([]);
+    const [users, setUsers] = useState<any>([]);
+
+    const [description, setDescription] = useState('');
+    const [pickedTests, setPickedTests] = useState([]);
+    const [activeTab, setActiveTab] = useState('');
+    const [editingTask, setEditingTask] = useState(null);
+    const [testInfo, setTestInfo] = useState({input: '', output: ''})
+
     useEffect(() => {
-        let count = 0;
-        tasks.forEach((task: any) => {
-            count += task.tests.length;
+
+    }, [tasks, tests])
+
+    useEffect(() => {
+        axios.get(process.env.REACT_APP_API_ADDRESS + "/admin/tasks")
+            .then((response) => {
+                if (response.status === 401) {
+                    navigate('/login');
+                } else {
+                    setTasks(response.data);
+                }
+            })
+            .catch((err) => {
+                console.error(err);
+            });
+        axios.get(process.env.REACT_APP_API_ADDRESS + "/admin/tests")
+            .then((response) => {
+                if (response.status === 401) {
+                    navigate('/login');
+                } else {
+                    setTests(response.data);
+                }
+            })
+            .catch((err) => {
+                console.error(err);
+            });
+        axios.get(process.env.REACT_APP_API_ADDRESS + "/users/")
+            .then((response) => {
+                if (response.status === 401) {
+                    navigate('/login');
+                } else {
+                    setUsers(response.data);
+                }
+            })
+            .catch((err) => {
+                console.error(err);
+            });
+    }, [])
+
+    const handleDelete = (task: any) => {
+        axios.delete(process.env.REACT_APP_API_ADDRESS + "/admin/deleteTask/" + task._id)
+        .then((response) => {
+            if (response.status === 204) {
+                let newTests = [...tests];
+                let newTasks = [...tasks];
+                const Tests = new Set(task.tests);
+                newTests = newTests.filter((newTest) => {
+                    return !Tests.has(newTest._id);
+                })
+                newTasks = newTasks.filter((newTask) => {
+                    return task._id !== newTask._id;
+                })
+                setTasks(newTasks);
+                setTests(newTests);
+            }
         })
-        setAmountOfTest(count);
-    }, [tasks])
-
-    function handleRowClick(task: any) {
-        setShowedDescription(task.description)
-        setShowedTest(task.tests);
-    }
-
-    function handleAddProblem() {
-        navigate("/tasks");
+        .catch((err) => {
+            console.error(err);
+        });
     }
 
     return (
@@ -55,7 +108,7 @@ export const Dashboard = () => {
                             <span>Tests</span>
                         </div>
                         <div className="value">
-                            <span>{amountOfTests}</span>
+                            <span>{tests.length}</span>
                         </div>
                     </div>
                 </div>
@@ -68,7 +121,7 @@ export const Dashboard = () => {
                             <span>Users</span>
                         </div>
                         <div className="value">
-                            <span>0</span>
+                            <span>{users.length}</span>
                         </div>
                     </div>
                 </div>
@@ -88,26 +141,55 @@ export const Dashboard = () => {
                             </tr>
                             </thead>
                             <tbody>
-                            {
-                                tasks.map((task: any) => {
-                                    return (
-                                        <tr
-                                            onClick={() => handleRowClick(task)}
-                                        >
-                                            <th>{task.id}</th>
-                                            <td>{task.name}</td>
-                                            <td>{task.difficulty}</td>
-                                            <td>{task.date}</td>
-                                            <td>{task.deadline}</td>
-                                            <td>
-                                                <FaPencil/>
-                                                &nbsp;
-                                                <FaTrashCan/>
-                                            </td>
-                                        </tr>
-                                    )
-                                })
-                            }
+                                {
+                                    tasks.map((task: any, index: number) => {
+                                        const date = new Date(task.date).toLocaleDateString('en-GB', {
+                                            day: '2-digit',
+                                            month: '2-digit',
+                                            year: 'numeric'
+                                        });
+                                        
+                                        const deadline = new Date(task.deadline).toLocaleDateString('en-GB', {
+                                            day: '2-digit',
+                                            month: '2-digit',
+                                            year: 'numeric'
+                                        });
+
+                                        return (
+                                            <tr
+                                                key={`tablerow${index}`}
+                                                onClick={() => {
+                                                    setDescription(task.description);
+                                                    setPickedTests(task.tests);
+                                                    setActiveTab('description');
+                                                }}
+                                            >
+                                                <th>{index + 1}</th>
+                                                <td>{task.name}</td>
+                                                <td>{task.difficulty}</td>
+                                                <td>{date}</td>
+                                                <td>{deadline}</td>
+                                                <td>
+                                                    <FaPencil 
+                                                     className="edit"
+                                                     data-bs-toggle="modal" 
+                                                    data-bs-target="#editProblem"
+                                                    onClick={() => {
+                                                        setEditingTask(task);
+                                                    }}
+                                                    />
+                                                    &nbsp;
+                                                    <FaTrashCan 
+                                                    className="delete"
+                                                    onClick={() => {
+                                                        handleDelete(task);
+                                                    }}
+                                                    />
+                                                </td>
+                                            </tr>
+                                        )
+                                    })
+                                }
                             </tbody>
                         </table>
                     </div>
@@ -116,15 +198,19 @@ export const Dashboard = () => {
                 <div className="col-4">
                     <div className="row m-lg-0">
                         <button
-                            disabled={showedDescription === ""}
+                            disabled={description === ''}
                             className="btn col-6 tab-btn m-1"
-                            onClick={() => setActiveTab('description')}>
+                            onClick={() => {
+                                setActiveTab('description')
+                            }}>
                             Description
                         </button>
                         <button
-                            disabled={!showedTests}
+                            disabled={description === ''}
                             className="btn col-5 tab-btn m-1"
-                            onClick={() => setActiveTab('tests')}>
+                            onClick={() => {
+                                setActiveTab('tests')
+                            }}>
                             Tests
                         </button>
                     </div>
@@ -132,7 +218,7 @@ export const Dashboard = () => {
                     {activeTab === 'description' && (
                         <div className="description">
                             <span>
-                                {showedDescription}
+                                {description}
                             </span>
                         </div>
                     )}
@@ -140,28 +226,42 @@ export const Dashboard = () => {
                     {activeTab === 'tests' && (
                         <div className="tests">
                             <ul>
-                                {showedTests!.map((test: any) => {
+                                {pickedTests!.map((test: any, index: number) => {
                                     return (
-                                        <li>{test.name}</li>
+                                        <li
+                                        data-bs-toggle="modal" 
+                                        data-bs-target="#test"
+                                        onClick={() => {
+                                            const foundTest = tests.find((t: any) => {
+                                                return t._id === test;
+                                            });
+                                            if (foundTest) {
+                                                setTestInfo(foundTest);
+                                            }
+                                        }}
+                                        >
+                                            {`Test ${index + 1}`}
+                                        </li>
                                     )
                                 })}
                             </ul>
                         </div>
                     )}
-
                 </div>
-
             </div>
-
             <div className="row">
                 <div className="col-8">
                     <div
-                        onClick={handleAddProblem}
+                        data-bs-toggle="modal" 
+                        data-bs-target="#addProblem"
                         className="btn tab-btn">
                         Add Problem
                     </div>
                 </div>
             </div>
+            <TestPopup test={testInfo}/>
+            <AddProblemForm setTasks={setTasks} setOldTests={setTests}/>
+            <EditProblemForm setTasks={setTasks} setOldTests={setTests} editingTask={editingTask} existingTests={tests} />
         </div>
     )
 }

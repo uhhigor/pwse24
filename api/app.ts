@@ -16,6 +16,7 @@ dotenv.config();
 let indexRouter = require('./routes/index.ts');
 let usersRouter = require('./routes/users.ts');
 let authRouter = require('./routes/auth.ts');
+let adminRouter = require('./routes/admin.ts');
 
 const app = express();
 app.use(cors({
@@ -31,6 +32,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/auth', authRouter);
+app.use('/admin', adminRouter);
 
 database_connect();
 
