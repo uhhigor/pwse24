@@ -8,10 +8,6 @@ div.dashboard-container {
     height: 90vh;
 }
 
-div.dashboard-container div.row {
-    margin-right: 0;
-}
-
 div.dashboard-container > div.row:nth-child(1) {
     justify-content: center;
 }
@@ -46,7 +42,7 @@ div.dashboard-container div.row div.widget-container div.icon {
     font-size: 2.1em;
     display: flex;
     align-self: flex-end;
-    margin-top: 5px;
+    margin-top: .5rem;
     margin-right: 20px;
 }
 

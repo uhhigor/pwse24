@@ -58,6 +58,7 @@ function requestRegister(event: any) {
         };
         axios.post(process.env.REACT_APP_API_ADDRESS + "/auth/register", data).then((response) => {
             console.log(response.data);
+            window.location.href = '/dashboard';
         }).catch((err) => {
             console.log("Error: " + err.response.data);
         });

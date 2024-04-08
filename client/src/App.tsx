@@ -3,11 +3,11 @@ import './style/App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import LoginPage from "./pages/auth/LoginPage";
 import RegisterPage from "./pages/auth/RegisterPage";
-import TasksPage from './pages/tasks/TasksPage';
+import TasksPage from "./pages/tasks/TasksPage";
 import MainPage from './pages/other/MainPage';
 import axios from "axios";
 import { Dashboard } from './pages/admin/Dashboard';
-import ProblemPage from "./pages/tasks/ProblemPage";
+import ProblemPage from './pages/tasks/ProblemPage';
 
 axios.defaults.withCredentials = true;
 function App() {

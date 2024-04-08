@@ -1,11 +1,11 @@
 .problemPage-container {
   margin-top: 50px;
   color: white;
-  width: 100vh !important; /* Adjust the width of the container */
+  width: 100vh !important;
 }
 
 .row .codingRow {
-  flex: 0 0 auto; /* Reset the flex behavior */
+  flex: 0 0 auto;
   width: 80%;
   margin: 0 auto;
   gap: 20px;
