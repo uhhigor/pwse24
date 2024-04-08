@@ -56,41 +56,47 @@ const TasksPage: React.FC = () => {
 
             <div className="row">
                 <div className="col">
+
                     <div className="table-container">
                         <h2>Tasks</h2>
-                        <table className=" table table-striped table-bordered table-dark">
-                            <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Description</th>
-                                <th>Deadline</th>
-                                <th>Actions</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {/*{tasks.map((task, index) => (*/}
-                            {/*    <tr key={index}>*/}
-                            {/*        <td>{task.name}</td>*/}
-                            {/*        <td>{task.description}</td>*/}
-                            {/*        <td>{task.deadline.toLocaleDateString()}</td>*/}
-                            {/*        <td>*/}
-                            {/*            <Link to={`/tasks/${index}`}>Solve the problem</Link>*/}
-                            {/*        </td>*/}
-                            {/*    </tr>*/}
-                            {/*))}*/}
+                        <div className='table-responsive'>
+                            <table className=" table table-borderless">
+                                <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Description</th>
+                                    <th>Deadline</th>
+                                    <th>Actions</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {/*{tasks.map((task, index) => (*/}
+                                {/*    <tr key={index}>*/}
+                                {/*        <td>{task.name}</td>*/}
+                                {/*        <td>{task.description}</td>*/}
+                                {/*        <td>{task.deadline.toLocaleDateString()}</td>*/}
+                                {/*        <td>*/}
+                                {/*            <Link to={`/tasks/${index}`}>Solve the problem</Link>*/}
+                                {/*        </td>*/}
+                                {/*    </tr>*/}
+                                {/*))}*/}
 
-                            <tr key={0}>
-                                <td>Name</td>
-                                <td>Description</td>
-                                <td>21/05/2024</td>
-                                <td>
-                                    <Link to={'/tasks/0'}>Solve the problem</Link>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
+                                <tr key={0}>
+                                    <td>Name</td>
+                                    <td>Description</td>
+                                    <td>21/05/2024</td>
+                                    <td>
+                                        <Link to={'/tasks/0'} className="linkColor">Solve the problem</Link>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
+            </div>
+            <div className="row">
+                <Link to={'/dashboard'} className="btn ms-3 goToDashboardButton">Go to Dashboard</Link>
             </div>
         </div>
     )
