@@ -2,7 +2,7 @@ import $ from "jquery";
 import axios from "axios";
 import React, {useState, SyntheticEvent} from 'react';
 import {Link} from 'react-router-dom';
-import "../../style/TaskPage.css";
+import "../../style/TasksPage.css";
 
 type Task = {
     name: string;
@@ -10,7 +10,7 @@ type Task = {
     deadline: Date;
 };
 
-const TaskPage: React.FC = () => {
+const TasksPage: React.FC = () => {
     const [tasks, setTasks] = useState<Task[]>([]);
 
     const createTask = (event: SyntheticEvent) => {
@@ -30,29 +30,29 @@ const TaskPage: React.FC = () => {
 
     return (
         <div className="TaskPage">
-            <div className="row">
-                <div className="col">
-                    <div className="content">
-                        <h2>Add new task</h2>
-                        <form className="form">
-                            <div>
-                                <label htmlFor="name">Name</label>
-                                <input type="text" id="name" name="name" className="inputBox"/>
-                            </div>
-                            <div>
-                                <label htmlFor="description">Description</label>
-                                <input type="text" id="description" name="description" className="inputBox"/>
-                            </div>
-                            <div>
-                                <label htmlFor="deadline">Deadline</label>
-                                <input type="date" id="deadline" name="deadline" className="inputBox"/>
-                            </div>
-                            <button onClick={createTask} className="btn btn-lg mt-4 createTaskButton">Create Task
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </div>
+            {/*<div className="row">*/}
+            {/*    <div className="col">*/}
+            {/*        <div className="content">*/}
+            {/*            <h2>Add new task</h2>*/}
+            {/*            <form className="form">*/}
+            {/*                <div>*/}
+            {/*                    <label htmlFor="name">Name</label>*/}
+            {/*                    <input type="text" id="name" name="name" className="inputBox"/>*/}
+            {/*                </div>*/}
+            {/*                <div>*/}
+            {/*                    <label htmlFor="description">Description</label>*/}
+            {/*                    <input type="text" id="description" name="description" className="inputBox"/>*/}
+            {/*                </div>*/}
+            {/*                <div>*/}
+            {/*                    <label htmlFor="deadline">Deadline</label>*/}
+            {/*                    <input type="date" id="deadline" name="deadline" className="inputBox"/>*/}
+            {/*                </div>*/}
+            {/*                <button onClick={createTask} className="btn btn-lg mt-4 createTaskButton">Create Task*/}
+            {/*                </button>*/}
+            {/*            </form>*/}
+            {/*        </div>*/}
+            {/*    </div>*/}
+            {/*</div>*/}
 
             <div className="row">
                 <div className="col">
@@ -68,16 +68,25 @@ const TaskPage: React.FC = () => {
                             </tr>
                             </thead>
                             <tbody>
-                            {tasks.map((task, index) => (
-                                <tr key={index}>
-                                    <td>{task.name}</td>
-                                    <td>{task.description}</td>
-                                    <td>{task.deadline.toLocaleDateString()}</td>
-                                    <td>
-                                        <Link to={`/tasks/${index}`}>Complete the task</Link>
-                                    </td>
-                                </tr>
-                            ))}
+                            {/*{tasks.map((task, index) => (*/}
+                            {/*    <tr key={index}>*/}
+                            {/*        <td>{task.name}</td>*/}
+                            {/*        <td>{task.description}</td>*/}
+                            {/*        <td>{task.deadline.toLocaleDateString()}</td>*/}
+                            {/*        <td>*/}
+                            {/*            <Link to={`/tasks/${index}`}>Solve the problem</Link>*/}
+                            {/*        </td>*/}
+                            {/*    </tr>*/}
+                            {/*))}*/}
+
+                            <tr key={0}>
+                                <td>Name</td>
+                                <td>Description</td>
+                                <td>21/05/2024</td>
+                                <td>
+                                    <Link to={'/tasks/0'}>Solve the problem</Link>
+                                </td>
+                            </tr>
                             </tbody>
                         </table>
                     </div>
@@ -116,4 +125,4 @@ const TaskPage: React.FC = () => {
 //     }
 // }
 
-export default TaskPage;
+export default TasksPage;

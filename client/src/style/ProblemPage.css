@@ -1,0 +1,27 @@
+.problemPage-container {
+  margin-top: 50px;
+  color: white;
+  width: 100vh !important;
+}
+
+.row .codingRow {
+  flex: 0 0 auto;
+  width: 80%;
+  margin: 0 auto;
+  gap: 20px;
+}
+
+.submitButtonPP {
+  width: 30% !important;
+  padding: 10px;
+  font-size: 18px;
+  background: #4e85d0 !important;
+  border: none !important;
+  border-bottom: 2px solid #007bff !important;
+  color: white !important;
+  outline: none;
+}
+
+.submitButtonPP:hover {
+  background: #007bff !important;
+}

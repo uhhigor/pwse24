@@ -4,7 +4,7 @@
     color: white;
 }
 
-.content {
+.TaskPage .content {
     width: 400px;
     height: 500px;
     background: #494f56;
@@ -19,7 +19,7 @@
     flex-direction: column;
     gap: 40px;}
 
-.content .form {
+.TaskPage .content .form {
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -27,12 +27,12 @@
     font-size: 20px;
 }
 
-.content form .inputBox {
+.TaskPage .content form .inputBox {
     position: relative;
     width: 100%;
 }
 
-form .createTaskButton {
+.TaskPage .form .createTaskButton {
     width: 100%;
     padding: 10px;
     font-size: 18px;
