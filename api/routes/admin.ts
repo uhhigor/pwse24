@@ -15,18 +15,32 @@ router.use(function(req: any, res: any, next: any) {
 // Tasks
 
 router.get('/tasks', (req: any, res: any, next: any) => {
-    if (req.currentUser.role !== "admin") {
-        return res.status(StatusCodes.UNAUTHORIZED);
-    }
+    // if (req.currentUser.role !== "admin") {
+    //     return res.status(StatusCodes.UNAUTHORIZED);
+    // }
 
     Task.find()
         .then((tasks) => {
+            console.log(tasks);
             return res.status(StatusCodes.OK).send(tasks);
         })
         .catch((err) => {
             return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(err.message);
         })
 });
+
+router.get('/tasks/:id', (req: any, res: any, next: any) => {
+    const { id } = req.params;
+    console.log('Received request for task with ID:', id);
+     Task.findById(id)
+        .then((task) => {
+            return res.status(StatusCodes.OK).send(task);
+        })
+        .catch((err) => {
+            return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(err.message);
+        })
+});
+
 
 router.post('/addTask', async (req: any, res: any, next: any) => {
     if (req.currentUser.role !== "admin") {
@@ -134,9 +148,9 @@ router.put('/editTask/:id', async (req: any, res: any, next: any) => {
 // Tests
 
 router.get('/tests', (req: any, res: any, next: any) => {
-    if (req.currentUser.role !== "admin") {
-        return res.status(StatusCodes.UNAUTHORIZED);
-    }
+    // if (req.currentUser.role !== "admin") {
+    //     return res.status(StatusCodes.UNAUTHORIZED);
+    // }
 
     Test.find()
         .then((tests) => {

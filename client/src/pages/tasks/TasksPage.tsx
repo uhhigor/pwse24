@@ -1,10 +1,12 @@
 import $ from "jquery";
 import axios from "axios";
-import React, {useState, SyntheticEvent} from 'react';
+import React, {useState, SyntheticEvent, useEffect} from 'react';
 import {Link} from 'react-router-dom';
 import "../../style/TasksPage.css";
+import { Button } from "bootstrap";
 
 type Task = {
+    _id: string;
     name: string;
     description: string;
     deadline: Date;
@@ -13,20 +15,35 @@ type Task = {
 const TasksPage: React.FC = () => {
     const [tasks, setTasks] = useState<Task[]>([]);
 
-    const createTask = (event: SyntheticEvent) => {
-        event.preventDefault();
-        const name = (document.getElementById("name") as HTMLInputElement).value;
-        const description = (document.getElementById("description") as HTMLInputElement).value;
-        const deadline = new Date((document.getElementById("deadline") as HTMLInputElement).value);
+    // const createTask = (event: SyntheticEvent) => {
+    //     event.preventDefault();
+    //     const name = (document.getElementById("name") as HTMLInputElement).value;
+    //     const description = (document.getElementById("description") as HTMLInputElement).value;
+    //     const deadline = new Date((document.getElementById("deadline") as HTMLInputElement).value);
 
-        const newTask: Task = {
-            name: name,
-            description: description,
-            deadline: deadline, // Fix: Change the type from Date to string
-        };
+    //     const newTask: Task = {
+    //         name: name,
+    //         description: description,
+    //         deadline: deadline, // Fix: Change the type from Date to string
+    //     };
 
-        setTasks(prevTasks => [...prevTasks, newTask]);
+    //     setTasks(prevTasks => [...prevTasks, newTask]);
+    // }
+
+    function showTasks() {
+        axios.get(process.env.REACT_APP_API_ADDRESS + "/admin/tasks").then((response) => {
+            console.log(response.data);
+            setTasks(response.data);
+        }).catch((err) => {
+            console.log("Error: " + err.response.data);
+        });
     }
+
+    useEffect(() => {
+        showTasks();
+    }, []);
+
+    
 
     return (
         <div className="TaskPage">
@@ -69,7 +86,6 @@ const TasksPage: React.FC = () => {
                                     <th>Actions</th>
                                 </tr>
                                 </thead>
-                                <tbody>
                                 {/*{tasks.map((task, index) => (*/}
                                 {/*    <tr key={index}>*/}
                                 {/*        <td>{task.name}</td>*/}
@@ -81,14 +97,17 @@ const TasksPage: React.FC = () => {
                                 {/*    </tr>*/}
                                 {/*))}*/}
 
-                                <tr key={0}>
-                                    <td>Name</td>
-                                    <td>Description</td>
-                                    <td>21/05/2024</td>
-                                    <td>
-                                        <Link to={'/tasks/0'} className="linkColor">Solve the problem</Link>
-                                    </td>
-                                </tr>
+                                <tbody>
+                                {tasks.map((task, index) => (
+                                    <tr key={index}>
+                                        <td>{task.name}</td>
+                                        <td>{task.description}</td>
+                                        <td>{task.deadline.toString()}</td>
+                                        <td>
+                                            <Link to={`/tasks/${task._id}`}>Solve the problem</Link>
+                                        </td>
+                                    </tr>
+                                ))}
                                 </tbody>
                             </table>
                         </div>
@@ -102,13 +121,7 @@ const TasksPage: React.FC = () => {
     )
 }
 
-// function showTasks() {
-//     axios.get(process.env.REACT_APP_API_ADDRESS + "/tasks").then((response) => {
-//         console.log(response.data);
-//     }).catch((err) => {
-//         console.log("Error: " + err.response.data);
-//     });
-// }
+
 
 
 // function requestTask(event: any) {

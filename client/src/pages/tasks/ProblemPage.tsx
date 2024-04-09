@@ -1,22 +1,61 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {useParams} from "react-router";
 import "../../style/ProblemPage.css";
 import CodeEditor from "../../CodeEditor";
+import axios from 'axios';
+
+type Task = {
+    name: string;
+    difficulty: string;
+    description: string;
+    deadline: Date;
+};
+
+type Test = {
+    _id: string;
+    input: string;
+    output: string;
+};
 
 const ProblemPage: React.FC = () => {
     let index = useParams().id;
+    const [task, setTask] = useState<Task>();
+    const [tests, setTests] = useState<Test[]>([]);
+
+    const getProblem = () => {
+        axios.get(process.env.REACT_APP_API_ADDRESS + "/admin/tasks/" + index)
+            .then((response) => {
+                console.log(response.data);
+                setTask(response.data);
+            }).catch((err) => {
+            console.log("Error: " + err.response.data);
+        });
+    };
+
+    const getTests = () => {
+        axios.get(process.env.REACT_APP_API_ADDRESS + "/admin/tests")
+            .then((response) => {
+                console.log(response.data);
+                setTests(response.data);
+            }).catch((err) => {
+            console.log("Error: " + err.response.data);
+        });
+    };
+
+    useEffect(() => {
+        getProblem();
+        getTests();
+    }   , []);
+
 
     return (
         <div className="problemPage-container">
             <h1 className="my-5">Problem {index}</h1>
             <div className="row">
-                <p>Name: </p>
-                <p>Difficulty: </p>
-                <p>Time remaining: </p>
-                <p>Description: And I promise you I'll never desert you again because after 'Salome' we'll make another
-                    picture and another picture. You see, this is my life! It always will be! Nothing else! Just us, and
-                    the cameras, and those wonderful people out there in the dark!... All right, Mr. DeMille, I'm ready
-                    for my close-up.</p>
+                <p>Name: {task?.name}</p>
+                <p>Difficulty: {task?.difficulty} </p>
+                <p>Time remaining: {task?.deadline?.toString()} </p>
+                <p>Description: {task?.description} </p>
             </div>
             <div className="row codingRow mt-5">
                 <div className="col-md-8 mx-5"> {/* Adjust the column width for CodeEditor */}
@@ -30,9 +69,13 @@ const ProblemPage: React.FC = () => {
                 <div className="col-md-2"> {/* Adjust the column width for Tests section */}
                     <h2>Tests:</h2>
                     <div>
-                        <p>Test 1</p>
-                        <p>Test 2</p>
-                        <p>Test 3</p>
+                        {tests.map((test) => {
+                            return (
+                                <div key={test._id} className="test">
+                                    <p>Test: {test._id}</p>
+                                </div>
+                            );
+                        })}
                     </div>
                 </div>
             </div>
