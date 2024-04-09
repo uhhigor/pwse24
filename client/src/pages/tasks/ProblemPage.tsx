@@ -9,23 +9,22 @@ type Task = {
     difficulty: string;
     description: string;
     deadline: Date;
+    tests: Test[];
 };
 
 type Test = {
-    _id: string;
     input: string;
     output: string;
-};
+}
 
 const ProblemPage: React.FC = () => {
     let index = useParams().id;
     const [task, setTask] = useState<Task>();
-    const [tests, setTests] = useState<Test[]>([]);
+    const [tests, setTests] = useState<Test[]>();
 
     const getProblem = () => {
         axios.get(process.env.REACT_APP_API_ADDRESS + "/admin/tasks/" + index)
             .then((response) => {
-                console.log(response.data);
                 setTask(response.data);
             }).catch((err) => {
             console.log("Error: " + err.response.data);
@@ -33,19 +32,22 @@ const ProblemPage: React.FC = () => {
     };
 
     const getTests = () => {
-        axios.get(process.env.REACT_APP_API_ADDRESS + "/admin/tests")
+        axios.get(process.env.REACT_APP_API_ADDRESS + "/admin/tests/" + index)
             .then((response) => {
-                console.log(response.data);
                 setTests(response.data);
             }).catch((err) => {
             console.log("Error: " + err.response.data);
         });
-    };
+    }
 
     useEffect(() => {
         getProblem();
         getTests();
     }   , []);
+
+    const goBack = () => {
+        window.history.back();
+    }
 
 
     return (
@@ -64,22 +66,23 @@ const ProblemPage: React.FC = () => {
                     </div>
                     <div className="row">
                         <button className="btn btn-lg mt-4 ms-2 submitButtonPP">Submit</button>
+                        <button className="btn btn-lg mt-4 ms-2 submitButtonPP" onClick={goBack}>Go Back</button>
                     </div>
                 </div>
                 <div className="col-md-2"> {/* Adjust the column width for Tests section */}
                     <h2>Tests:</h2>
-                    <div>
-                        {tests.map((test) => {
-                            return (
-                                <div key={test._id} className="test">
-                                    <p>Test: {test._id}</p>
-                                </div>
-                            );
-                        })}
-                    </div>
+                    <div className="tests-container">
+                        {tests?.map((test, index) => (
+                            <div key={index} className="test">
+                                <h5>Test {index + 1}</h5>
+                                <p>Input: {test.input}</p>
+                                <p>Output: {test.output}</p>
+                            </div>
+                        ))}
                 </div>
             </div>
         </div>
+    </div>
     );
 };
 

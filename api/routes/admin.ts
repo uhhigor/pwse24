@@ -21,7 +21,6 @@ router.get('/tasks', (req: any, res: any, next: any) => {
 
     Task.find()
         .then((tasks) => {
-            console.log(tasks);
             return res.status(StatusCodes.OK).send(tasks);
         })
         .catch((err) => {
@@ -31,7 +30,6 @@ router.get('/tasks', (req: any, res: any, next: any) => {
 
 router.get('/tasks/:id', (req: any, res: any, next: any) => {
     const { id } = req.params;
-    console.log('Received request for task with ID:', id);
      Task.findById(id)
         .then((task) => {
             return res.status(StatusCodes.OK).send(task);
@@ -155,6 +153,27 @@ router.get('/tests', (req: any, res: any, next: any) => {
     Test.find()
         .then((tests) => {
             return res.status(StatusCodes.OK).send(tests);
+        })
+        .catch((err) => {
+            return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(err.message);
+        })
+});
+
+router.get('/tests/:id', (req: any, res: any, next: any) => {
+    const { id } = req.params;
+
+    Task.findById(id)
+        .then((task) => {
+            if (!task) {
+                return res.status(StatusCodes.NOT_FOUND).send('Task not found');
+            }
+            Test.find({_id: { $in: task.tests }})
+                .then((tests) => {
+                    return res.status(StatusCodes.OK).send(tests);
+                })
+                .catch((err) => {
+                    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(err.message);
+                })
         })
         .catch((err) => {
             return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(err.message);
