@@ -12,7 +12,7 @@
     color: white;
 }
 
-.content {
+.LoginPage .content {
     position: relative;
     width: 100%;
     display: flex;
@@ -22,7 +22,7 @@
     gap: 70px;
 }
 
-.content .form {
+.LoginPage .content .form {
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -30,7 +30,7 @@
     font-size: 20px;
 }
 
-.content form .inputBox {
+.LoginPage .content form .inputBox {
     position: relative;
     width: 100%;
 }

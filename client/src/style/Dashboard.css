@@ -4,12 +4,8 @@
 /* tabs: #24201c */
 
 div.dashboard-container {
-    width: 100vh;
-    height: 100vh;
-}
-
-div.dashboard-container div.row {
-    margin-right: 0;
+    width: 90vh;
+    height: 90vh;
 }
 
 div.dashboard-container > div.row:nth-child(1) {
@@ -46,7 +42,7 @@ div.dashboard-container div.row div.widget-container div.icon {
     font-size: 2.1em;
     display: flex;
     align-self: flex-end;
-    margin-top: 5px;
+    margin-top: .5rem;
     margin-right: 20px;
 }
 
@@ -81,9 +77,11 @@ div.dashboard-container div.row div.table-responsive table.table tbody tr td > s
 }
 
 div.dashboard-container div.row button.tab-btn {
-    background-color: #579169;
     color: #f0f9ff;
     border-radius: 5px;
+    background: #4e85d0;
+    border: none;
+    border-bottom: 2px solid #007bff;
 }
 
 div.dashboard-container div.row div.description {
@@ -112,7 +110,9 @@ div.dashboard-container div.row div div.btn {
     margin-left: 20px;
     width: 95%;
     align-self: center;
-    background-color: #579169;
+    background: #4e85d0;
+    border: none;
+    border-bottom: 2px solid #007bff;
     color: #f0f9ff;
 }
 

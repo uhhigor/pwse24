@@ -1,0 +1,27 @@
+.editProblem-container input,
+.addProblem-container input,
+.editProblem-container textarea,
+.editProblem-container select,
+.addProblem-container textarea,
+.addProblem-container select
+{
+    background-color: rgba(113, 116, 119, 0.89);
+    border-radius: 5px;
+    margin: 3px;
+}
+
+.editProblem-container input:focus,
+.addProblem-container input:focus {
+    background-color: rgb(131, 135, 140);
+
+}
+
+.editProblem-container .testsInput,
+.addProblem-container .testsInput{
+    margin-right: 0 !important;
+}
+
+.editProblem-container .testsOutput,
+.addProblem-container .testsOutput {
+    margin-left: 1px !important;
+}

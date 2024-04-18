@@ -3,10 +3,11 @@ import './style/App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import LoginPage from "./pages/auth/LoginPage";
 import RegisterPage from "./pages/auth/RegisterPage";
-import TaskPage from './pages/tasks/TaskPage';
+import TasksPage from "./pages/tasks/TasksPage";
 import MainPage from './pages/other/MainPage';
 import axios from "axios";
 import { Dashboard } from './pages/admin/Dashboard';
+import ProblemPage from './pages/tasks/ProblemPage';
 
 axios.defaults.withCredentials = true;
 function App() {
@@ -17,7 +18,8 @@ function App() {
           <Routes>
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
-            <Route path="/tasks" element={<TaskPage />} />
+            <Route path="/tasks" element={<TasksPage />} />
+            <Route path="/tasks/:id" element={<ProblemPage />} />
             <Route path="/" element={<MainPage />} />
             <Route path="/dashboard" element={<Dashboard />} />
           </Routes>

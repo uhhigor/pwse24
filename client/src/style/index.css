@@ -8,6 +8,9 @@ body {
     background-repeat: no-repeat;
     width: 100vw;
     height: 100vh;
-    font-family: "Chakra Petch", sans-serif !important;
+    font-family: "Chakra Petch", sans-serif !important; /* Increase specificity */
+
+
+
 }
 

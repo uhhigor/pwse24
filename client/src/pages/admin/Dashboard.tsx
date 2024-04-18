@@ -82,7 +82,7 @@ export const Dashboard = () => {
 
     return (
         <div className="dashboard-container">
-            <div className="row">
+            <div className="row m-5">
                 <div className="col-4">
                     <div className="widget-container">
                         <div className="icon">
@@ -124,7 +124,7 @@ export const Dashboard = () => {
                 </div>
             </div>
             <div className="row mt-5">
-                <div className="col-8">
+                <div className="col-9">
                     <div className='table-responsive'>
                         <table className='table table-borderless'>
                             <thead>
@@ -190,17 +190,27 @@ export const Dashboard = () => {
                             </tbody>
                         </table>
                     </div>
+                    <div className="row">
+                        <div className="col-8">
+                            <div
+                                data-bs-toggle="modal"
+                                data-bs-target="#addProblem"
+                                className="btn tab-btn">
+                                Add Problem
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <div className="col-4">
-                    <div className="row m-lg-0">
+                <div className="col-3">
+                    <div className="row">
                         <button
                             disabled={description === ''}
-                            className="btn col-6 tab-btn m-1"
+                            className="btn col-5 tab-btn m-1 ms-2"
                             onClick={() => {
                                 setActiveTab('description')
                             }}>
-                            Description
+                            Desc
                         </button>
                         <button
                             disabled={description === ''}
@@ -213,7 +223,7 @@ export const Dashboard = () => {
                     </div>
 
                     {activeTab === 'description' && (
-                        <div className="description">
+                        <div className="description ms-0">
                             <span>
                                 {description}
                             </span>
@@ -244,16 +254,6 @@ export const Dashboard = () => {
                             </ul>
                         </div>
                     )}
-                </div>
-            </div>
-            <div className="row">
-                <div className="col-8">
-                    <div
-                        data-bs-toggle="modal" 
-                        data-bs-target="#addProblem"
-                        className="btn tab-btn">
-                        Add Problem
-                    </div>
                 </div>
             </div>
             <TestPopup test={testInfo}/>
