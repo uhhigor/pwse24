@@ -12,9 +12,8 @@ div.dashboard-container div.row {
     margin-right: 0;
 }
 
-div.dashboard-container div.row:nth-child(1) {
+div.dashboard-container > div.row:nth-child(1) {
     justify-content: center;
-    : center;
 }
 
 div.dashboard-container div.row div.widget-container {
@@ -69,6 +68,18 @@ div.dashboard-container div.row div.table-responsive table.table tr:active {
     --bs-table-bg: #494f56;
 }
 
+div.dashboard-container div.row div.table-responsive table.table tbody tr:hover {
+    --bs-table-bg: #60656b;
+}
+
+div.dashboard-container div.row div.table-responsive table.table tbody tr td > svg.delete:hover {
+    fill:#dc3545;
+}
+
+div.dashboard-container div.row div.table-responsive table.table tbody tr td > svg.edit:hover {
+    fill:#e7c246;
+}
+
 div.dashboard-container div.row button.tab-btn {
     background-color: #579169;
     color: #f0f9ff;
@@ -78,7 +89,7 @@ div.dashboard-container div.row button.tab-btn {
 div.dashboard-container div.row div.description {
     border-radius: 10px;
     width: 100%;
-    min-height: 100%;
+    padding: 10px;
     font-size: 0.7em;
     background-color: #494f56;
     color: #f0f9ff;
@@ -87,10 +98,14 @@ div.dashboard-container div.row div.description {
 div.dashboard-container div.row div.tests {
     border-radius: 10px;
     width: 100%;
-    min-height: 100%;
+    padding: 10px;
     font-size: 0.7em;
     background-color: #1c2124;
     color: #f0f9ff;
+}
+
+div.dashboard-container div.row div.tests ul li {
+    cursor: pointer;
 }
 
 div.dashboard-container div.row div div.btn {
@@ -100,3 +115,13 @@ div.dashboard-container div.row div div.btn {
     background-color: #579169;
     color: #f0f9ff;
 }
+
+div.dashboard-container div.modal#addProblem div.modal-dialog div.modal-content,
+div.dashboard-container div.modal#test div.modal-dialog div.modal-content,
+div.dashboard-container div.modal#editProblem div.modal-dialog div.modal-content {
+    background-color: #ffffff1c;
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    color: #f0f9ff;
+}
+
