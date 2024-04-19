@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useState } from "react";
+import "../../style/ProblemForms.css"
 
 export const AddProblemForm = ({setTasks, setOldTests}: any) => {
 
@@ -37,7 +38,7 @@ export const AddProblemForm = ({setTasks, setOldTests}: any) => {
     }
 
     return (
-        <div className="modal fade" id="addProblem" tabIndex={-1} aria-labelledby="addProblemLabel" aria-hidden="true">
+        <div className="modal fade addProblem-container" id="addProblem" tabIndex={-1} aria-labelledby="addProblemLabel" aria-hidden="true">
             <div className="modal-dialog">
                 <div className="modal-content">
                     <div className="modal-header">
@@ -95,7 +96,7 @@ export const AddProblemForm = ({setTasks, setOldTests}: any) => {
                                             setTests(newTests);
                                         }}
                                         value={tests[index].input}
-                                        className="col-4" id="input1" name={`input${index}`} placeholder="Input"/>
+                                        className="col-4 testsInput" id="input1" name={`input${index}`} placeholder="Input"/>
 
                                         <textarea 
                                         onChange={(e) => {
@@ -104,7 +105,7 @@ export const AddProblemForm = ({setTasks, setOldTests}: any) => {
                                             setTests(newTests);
                                         }}
                                         value={tests[index].output}
-                                        className="col-4" id="output1" name={`output${index}`} placeholder="Output"/>
+                                        className="col-4 testsOutput" id="output1" name={`output${index}`} placeholder="Output"/>
                                     </React.Fragment>
                                 )
                             })
