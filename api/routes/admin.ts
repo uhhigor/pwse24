@@ -15,9 +15,9 @@ router.use(function(req: any, res: any, next: any) {
 // Tasks
 
 router.get('/tasks', (req: any, res: any, next: any) => {
-    if (req.currentUser.role !== "admin") {
-        return res.status(StatusCodes.UNAUTHORIZED);
-    }
+    // if (req.currentUser.role !== "admin") {
+    //     return res.status(StatusCodes.UNAUTHORIZED);
+    // }
 
     Task.find()
         .then((tasks) => {
@@ -27,6 +27,18 @@ router.get('/tasks', (req: any, res: any, next: any) => {
             return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(err.message);
         })
 });
+
+router.get('/tasks/:id', (req: any, res: any, next: any) => {
+    const { id } = req.params;
+     Task.findById(id)
+        .then((task) => {
+            return res.status(StatusCodes.OK).send(task);
+        })
+        .catch((err) => {
+            return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(err.message);
+        })
+});
+
 
 router.post('/addTask', async (req: any, res: any, next: any) => {
     if (req.currentUser.role !== "admin") {
@@ -134,13 +146,34 @@ router.put('/editTask/:id', async (req: any, res: any, next: any) => {
 // Tests
 
 router.get('/tests', (req: any, res: any, next: any) => {
-    if (req.currentUser.role !== "admin") {
-        return res.status(StatusCodes.UNAUTHORIZED);
-    }
+    // if (req.currentUser.role !== "admin") {
+    //     return res.status(StatusCodes.UNAUTHORIZED);
+    // }
 
     Test.find()
         .then((tests) => {
             return res.status(StatusCodes.OK).send(tests);
+        })
+        .catch((err) => {
+            return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(err.message);
+        })
+});
+
+router.get('/tests/:id', (req: any, res: any, next: any) => {
+    const { id } = req.params;
+
+    Task.findById(id)
+        .then((task) => {
+            if (!task) {
+                return res.status(StatusCodes.NOT_FOUND).send('Task not found');
+            }
+            Test.find({_id: { $in: task.tests }})
+                .then((tests) => {
+                    return res.status(StatusCodes.OK).send(tests);
+                })
+                .catch((err) => {
+                    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(err.message);
+                })
         })
         .catch((err) => {
             return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(err.message);
