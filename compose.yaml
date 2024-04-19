@@ -8,15 +8,21 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     develop:
       watch:
-        - action: sync
+        - action: sync+restart
           path: ./api/.
           target: /home/node/app
+        - action: rebuild
+          path: ./api/package.json
+          target: /home/node/app/package.json
   frontend:
     build: ./client
     ports:
       - "5005:5005"
     develop:
       watch:
-        - action: sync
+        - action: sync+restart
           path: ./client
           target: /home/node/app
+        - action: rebuild
+          path: ./client/package.json
+          target: /home/node/app/package.json
