@@ -65,7 +65,7 @@ let createTester =  (image: string, command: DockerCommand) => {
 }
 
 export let python= createTester("python:latest",(main, solution) => {
-    return ['sh','-c',`echo "${main}" > main.py && echo "${solution}" > solution.py && python main.py`]
+    return ['sh','-c',`echo "${main}" > main.py && echo "${solution}" > solution.py && python main.py && echo "\n$?"`]
 })
 export default {
     createTester,

@@ -14,6 +14,8 @@ services:
         - action: rebuild
           path: ./api/package.json
           target: /home/node/app/package.json
+    env_file:
+      - ./api/pwse_api.env
   frontend:
     build: ./client
     ports:
@@ -26,3 +28,5 @@ services:
         - action: rebuild
           path: ./client/package.json
           target: /home/node/app/package.json
+    env_file:
+      - ./client/pwse_client.env
