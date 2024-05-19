@@ -49,6 +49,7 @@ function requestLogin(event: any) {
             .then((response) => {
                 console.log(response.data);
                 window.location.href = '/tasks';
+                localStorage.setItem("email", email.val() as string);
             }).catch((err) => {
             console.log("Error: " + err.response.data);
         });

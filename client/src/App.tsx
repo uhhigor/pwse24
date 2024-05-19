@@ -8,6 +8,7 @@ import MainPage from './pages/other/MainPage';
 import axios from "axios";
 import { Dashboard } from './pages/admin/Dashboard';
 import ProblemPage from './pages/tasks/ProblemPage';
+import ProfileManagement from './pages/auth/ProfileManagement';
 
 axios.defaults.withCredentials = true;
 function App() {
@@ -22,6 +23,7 @@ function App() {
             <Route path="/tasks/:id" element={<ProblemPage />} />
             <Route path="/" element={<MainPage />} />
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/profileManagement/:email" element={<ProfileManagement/>} />
           </Routes>
         </header>
       </Router>

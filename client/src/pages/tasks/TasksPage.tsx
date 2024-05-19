@@ -2,6 +2,7 @@ import axios from "axios";
 import React, {useState, SyntheticEvent, useEffect} from 'react';
 import {Link} from 'react-router-dom';
 import "../../style/TasksPage.css";
+import {getEmail} from "../../UserData";
 
 type Task = {
     _id: string;
@@ -61,6 +62,7 @@ const TasksPage: React.FC = () => {
             </div>
             <div className="row">
                 <Link to={'/dashboard'} className="btn ms-3 goToDashboardButton">Go to Dashboard</Link>
+                <Link to={`/profileManagement/${encodeURIComponent(getEmail() as string)}`} className="btn ms-3 goToDashboardButton">Go to your profile</Link>
             </div>
         </div>
     )

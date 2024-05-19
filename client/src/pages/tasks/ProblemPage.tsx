@@ -56,7 +56,7 @@ const ProblemPage: React.FC = () => {
             <div className="row">
                 <p>Name: {task?.name}</p>
                 <p>Difficulty: {task?.difficulty} </p>
-                <p>Time remaining: {task?.deadline?.toString().substring(0,10) + ", " + task?.deadline?.toString().substring(10, 19)} </p>
+                <p>Time remaining: {task?.deadline.toString().substring(0,10) + ", " + task?.deadline.toString().substring(10, 19)} </p>
                 <p>Description: {task?.description} </p>
             </div>
             <div className="row codingRow mt-5">
