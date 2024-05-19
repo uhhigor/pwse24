@@ -52,15 +52,15 @@ const ProblemPage: React.FC = () => {
 
     return (
         <div className="problemPage-container">
-            <h1 className="my-5">Problem {index}</h1>
+            <h1 className="my-5">Problem {task?.name}</h1>
             <div className="row">
                 <p>Name: {task?.name}</p>
                 <p>Difficulty: {task?.difficulty} </p>
-                <p>Time remaining: {task?.deadline?.toString()} </p>
+                <p>Time remaining: {task?.deadline?.toString().substring(0,10) + ", " + task?.deadline?.toString().substring(10, 19)} </p>
                 <p>Description: {task?.description} </p>
             </div>
             <div className="row codingRow mt-5">
-                <div className="col-md-8 mx-5"> {/* Adjust the column width for CodeEditor */}
+                <div className="col-md-8 mx-5">
                     <div className="code-editor-container">
                         <CodeEditor initialValue="console.log('Hello, world!');"/>
                     </div>
@@ -69,7 +69,7 @@ const ProblemPage: React.FC = () => {
                         <button className="btn btn-lg mt-4 ms-2 submitButtonPP" onClick={goBack}>Go Back</button>
                     </div>
                 </div>
-                <div className="col-md-2"> {/* Adjust the column width for Tests section */}
+                <div className="col-md-2">
                     <h2>Tests:</h2>
                     <div className="tests-container">
                         {tests?.map((test, index) => (

@@ -47,7 +47,7 @@ const TasksPage: React.FC = () => {
                                     <tr key={index}>
                                         <td>{task.name}</td>
                                         <td>{task.description}</td>
-                                        <td>{task.deadline.toString()}</td>
+                                        <td>{task.deadline.toString().substring(0,10) + ", " + task.deadline.toString().substring(11, 19)}</td>
                                         <td>
                                             <Link to={`/tasks/${task._id}`}>Solve the problem</Link>
                                         </td>
