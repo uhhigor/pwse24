@@ -1,3 +1,5 @@
+import * as string_decoder from "string_decoder";
+
 let Docker = require('dockerode');
 let fs = require('node:fs');
 let docker = new Docker();
@@ -22,10 +24,11 @@ let ensureImage = (image:string) => {
     })
 
 }
+type Result = {body:string,passed:boolean}
 let createTester =  (image: string, command: DockerCommand) => {
 
     return (main: string, solution: string) => {
-        return new Promise<string>((resolve, reject) => {
+        return new Promise<Result>((resolve, reject) => {
             let result: string = '';
             docker.createContainer({
                 Image: image,
@@ -51,7 +54,23 @@ let createTester =  (image: string, command: DockerCommand) => {
                             });
 
                             stream.on('end', () => {
-                                resolve(result);
+                                // resolve(result);
+                                exec.inspect((inspectErr: any, data: any) => {
+                                    if (inspectErr) {
+                                        reject(inspectErr);
+                                        return;
+                                    }
+
+                                    const exitCode = data.ExitCode;
+
+                                    if (exitCode === 0) {
+                                        resolve({body: result, passed: true});
+                                    } else {
+                                        resolve({body: result, passed: false});
+                                    }
+                                })
+
+
                                 container.stop((err: any, stop: any) => {
                                     container.remove();
                                 })
@@ -65,12 +84,18 @@ let createTester =  (image: string, command: DockerCommand) => {
 }
 
 export let python= createTester("python:latest",(main, solution) => {
-    return ['sh','-c',`echo "${main}" > main.py && echo "${solution}" > solution.py && python main.py`]
+    return ['sh','-c',`echo "${main}" > main.py && echo "${solution}" > solution.py && python -m unittest -v main.py`]
 })
-export default {
-    createTester,
-    python,
+export enum Images{
+    pythonImage = "python"
 }
+export let getContainer = (name:string) => {
+    switch (name){
+        case Images.pythonImage: return python
+        default: return "Language "+name+" is not implemented";
+    }
+};
+
 
 // use example
 // let Docker = require('dockerode');
