@@ -40,6 +40,15 @@ const ProblemPage: React.FC = () => {
         });
     }
 
+    const submitSolution = () => {
+        let data = {
+            language:"python",
+            solution:"def solution(a,b):\n\treturn a+b",
+            taskID:2137
+        }
+        axios.post(process.env.REACT_APP_API_ADDRESS + '/tester/check',data)
+    }
+
     useEffect(() => {
         getProblem();
         getTests();
@@ -65,7 +74,7 @@ const ProblemPage: React.FC = () => {
                         <CodeEditor initialValue="console.log('Hello, world!');"/>
                     </div>
                     <div className="row">
-                        <button className="btn btn-lg mt-4 ms-2 submitButtonPP">Submit</button>
+                        <button className="btn btn-lg mt-4 ms-2 submitButtonPP" onClick={submitSolution}>Submit</button>
                         <button className="btn btn-lg mt-4 ms-2 submitButtonPP" onClick={goBack}>Go Back</button>
                     </div>
                 </div>
