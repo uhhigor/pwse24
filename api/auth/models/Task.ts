@@ -19,10 +19,6 @@ const taskSchema = new Schema({
         type: Date,
         required: true
     },
-    deadline: {
-        type: Date,
-        required: false,
-    },
     tests: {
         type: Array,
         required: true

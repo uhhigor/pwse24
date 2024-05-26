@@ -5,7 +5,7 @@ import {StatusCodes} from "http-status-codes";
 import User from "../auth/models/User";
 import mongoose from "mongoose";
 import {authenticateToken} from "../auth/jwt/jwt";
-import Task from "../tasks/Task";
+import Task from "../auth/models/Task";
 import TaskSolution from "../tasks/TaskSolution";
 
 // Authenticate token

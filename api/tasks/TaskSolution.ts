@@ -10,8 +10,9 @@ const taskSolutionSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Task'
     },
-    filePath: {
-        type: Schema.Types.String
+    textBlob: {
+        type: Schema.Types.Buffer,
+        required: true
     },
     score: {
         type: Schema.Types.Number
@@ -19,7 +20,7 @@ const taskSolutionSchema = new Schema({
     createdAt: {
         type: Date,
         default: Date.now
-    }
+    },
 });
 
 export default mongoose.model('TaskSolution', taskSolutionSchema);
