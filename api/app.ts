@@ -21,7 +21,7 @@ let testerRouter = require('./routes/tester')
 
 const app = express();
 app.use(cors({
-    origin: 'http://localhost:3000',
+    origin: 'http://localhost:5005',
     credentials: true
 }));
 app.use(logger('dev'));
