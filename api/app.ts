@@ -16,15 +16,18 @@ dotenv.config();
 let indexRouter = require('./routes/index.ts');
 let usersRouter = require('./routes/users.ts');
 let authRouter = require('./routes/auth.ts');
-let adminRouter = require('./routes/admin.ts');
-let testerRouter = require('./routes/tester')
-let solutionRouter = require('./routes/solutions.ts');
+
+
+let taskRouter = require('./routes/TaskRouter.ts');
+let taskTestRouter = require('./routes/TaskTestRouter.ts');
+let solutionRouter = require('./routes/SolutionRouter.ts');
 
 const app = express();
 app.use(cors({
-    origin: 'http://localhost:3000',
-    credentials: true
+    origin: ['http://localhost:5005'],
+    credentials: true,
 }));
+
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -34,11 +37,15 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/auth', authRouter);
-app.use('/admin', adminRouter);
-app.use('/tester', testerRouter);
+
+app.use('/task', taskRouter);
+app.use('/tasktest', taskTestRouter);
 app.use('/solution', solutionRouter);
 
-database_connect();
-
+database_connect().then(() => {
+    console.log('Connected to database');
+}).catch((err) => {
+    console.error("Error connecting to database", err);
+});
 
 module.exports = app;

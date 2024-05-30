@@ -43,7 +43,7 @@ export const EditProblemForm = ({setTasks, setOldTests, editingTask, existingTes
 
     const handleEdit = () => {
         console.log(editingTask);
-        axios.put(process.env.REACT_APP_API_ADDRESS + "/admin/editTask/" + editingTask._id, {
+        axios.put(process.env.REACT_APP_API_ADDRESS + "/task/" + editingTask._id, {
             name: name,
             difficulty: difficulty,
             deadline: deadline,
@@ -52,14 +52,14 @@ export const EditProblemForm = ({setTasks, setOldTests, editingTask, existingTes
         })
         .then((response) => {
             if (response.status === 200) {
-                axios.get(process.env.REACT_APP_API_ADDRESS + "/admin/tasks")
+                axios.get(process.env.REACT_APP_API_ADDRESS + "/task/")
                     .then((response) => {
                         setTasks(response.data);
                     })
                     .catch((err) => {
                         console.error(err);
                     });
-                axios.get(process.env.REACT_APP_API_ADDRESS + "/admin/tests")
+                axios.get(process.env.REACT_APP_API_ADDRESS + "/task/")
                     .then((response) => {
                         setOldTests(response.data);
                     })
