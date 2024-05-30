@@ -2,10 +2,10 @@ import express from 'express';
 const router = express.Router();
 
 import {StatusCodes} from "http-status-codes";
-import Task from '../auth/models/Task';
+import Task from '../tasks/Task';
 import mongoose from "mongoose";
 import {authenticateToken} from "../auth/jwt/jwt";
-import Test from '../auth/models/Test';
+import Test from '../tasks/Test';
 
 // Authenticate token
 router.use(function(req: any, res: any, next: any) {

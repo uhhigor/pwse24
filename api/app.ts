@@ -18,6 +18,7 @@ let usersRouter = require('./routes/users.ts');
 let authRouter = require('./routes/auth.ts');
 let adminRouter = require('./routes/admin.ts');
 let testerRouter = require('./routes/tester')
+let solutionRouter = require('./routes/solutions.ts');
 
 const app = express();
 app.use(cors({
@@ -35,6 +36,7 @@ app.use('/users', usersRouter);
 app.use('/auth', authRouter);
 app.use('/admin', adminRouter);
 app.use('/tester', testerRouter);
+app.use('/solution', solutionRouter);
 
 database_connect();
 

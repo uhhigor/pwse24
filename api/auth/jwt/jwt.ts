@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import {StatusCodes} from "http-status-codes";
-import User from "../models/User";
+import User from "../model/User";
 
 function generateToken(email: String, role: String) {
     return jwt.sign({ email, role }, process.env.ACCESS_TOKEN_SECRET!, { expiresIn: '1h' });

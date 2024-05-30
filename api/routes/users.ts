@@ -3,10 +3,10 @@ import express from 'express';
 const router = express.Router();
 
 import {StatusCodes} from "http-status-codes";
-import User from "../auth/models/User";
+import User from "../auth/model/User";
 import mongoose from "mongoose";
 import {authenticateToken} from "../auth/jwt/jwt";
-import {hashPassword} from "../auth/bcrypt";
+import {hashPassword} from "../auth/bcrypt/bcrypt";
 
 // Authenticate token
 router.use(function (req: any, res: any, next: any) {
