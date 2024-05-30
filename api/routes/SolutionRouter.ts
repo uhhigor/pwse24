@@ -54,12 +54,11 @@ router.post('/task/:taskid', function(req: any, res: any, next: any) {
     if (!userId || !score || !textBlob) {
         return res.status(StatusCodes.BAD_REQUEST).send("Missing parameters");
     }
-    let filePath = null;
     TaskSolution.create({userId, taskId, textBlob, score}).then((solution) => {
         if (solution) {
             return res.status(StatusCodes.OK).send(solution);
         } else {
-            return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send("Error saving solution");
+            return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send("Error while saving solution");
         }
     }).catch((err) => {
         return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(err.message);
