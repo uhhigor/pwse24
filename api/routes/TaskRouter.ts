@@ -37,9 +37,9 @@ router.get('/:id', (req: any, res: any, next: any) => {
 
 
 router.post('/', async (req: any, res: any, next: any) => {
-    if (req.currentUser.role !== "admin") {
+    /*if (req.currentUser.role !== "admin") {
         return res.status(StatusCodes.UNAUTHORIZED);
-    }
+    }*/
     const {name, difficulty, deadline, description, tests} = req.body;
     const date = new Date();
     const createdTests = <any>[];

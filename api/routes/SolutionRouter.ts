@@ -46,7 +46,7 @@ router.get('/:id', function(req: any, res: any, next: any) {
 
 // POST add task solution to task
 router.post('/task/:taskid', function(req: any, res: any, next: any) {
-    let taskId = req.params.taskId;
+    let taskId = req.params.taskid;
     if(!mongoose.isValidObjectId(taskId)) {
         return res.status(StatusCodes.BAD_REQUEST).send("Invalid id");
     }
