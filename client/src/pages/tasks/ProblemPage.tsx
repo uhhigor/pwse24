@@ -8,13 +8,13 @@ type Task = {
     name: string;
     difficulty: string;
     description: string;
-    deadline: Date;
+    language: string;
     tests: Test[];
 };
 
 type Test = {
-    input: string;
-    output: string;
+    givenInput: string;
+    expectedOutput: string;
 }
 
 const ProblemPage: React.FC = () => {
@@ -23,7 +23,7 @@ const ProblemPage: React.FC = () => {
     const [tests, setTests] = useState<Test[]>();
 
     const getProblem = () => {
-        axios.get(process.env.REACT_APP_API_ADDRESS + "/admin/tasks/" + index)
+        axios.get(process.env.REACT_APP_API_ADDRESS + "/task/" + index)
             .then((response) => {
                 setTask(response.data);
             }).catch((err) => {
@@ -32,7 +32,7 @@ const ProblemPage: React.FC = () => {
     };
 
     const getTests = () => {
-        axios.get(process.env.REACT_APP_API_ADDRESS + "/admin/tests/" + index)
+        axios.get(process.env.REACT_APP_API_ADDRESS + "/tasktest/task/" + index)
             .then((response) => {
                 setTests(response.data);
             }).catch((err) => {
@@ -65,7 +65,7 @@ const ProblemPage: React.FC = () => {
             <div className="row">
                 <p>Name: {task?.name}</p>
                 <p>Difficulty: {task?.difficulty} </p>
-                <p>Time remaining: {task?.deadline.toString().substring(0,10) + ", " + task?.deadline.toString().substring(10, 19)} </p>
+                <p>Language: {task?.language} </p>
                 <p>Description: {task?.description} </p>
             </div>
             <div className="row codingRow mt-5">
@@ -84,8 +84,8 @@ const ProblemPage: React.FC = () => {
                         {tests?.map((test, index) => (
                             <div key={index} className="test">
                                 <h5>Test {index + 1}</h5>
-                                <p>Input: {test.input}</p>
-                                <p>Output: {test.output}</p>
+                                <p>Input: {test.givenInput}</p>
+                                <p>Output: {test.expectedOutput}</p>
                             </div>
                         ))}
                 </div>

@@ -40,19 +40,19 @@ router.post('/', async (req: any, res: any, next: any) => {
     /*if (req.currentUser.role !== "admin") {
         return res.status(StatusCodes.UNAUTHORIZED);
     }*/
-    const {name, difficulty, deadline, description, tests} = req.body;
+    const {name, difficulty, language, description, tests} = req.body;
     const date = new Date();
     const createdTests = <any>[];
     const createdTestsIds = <any>[];
 
     try {
         for (const test of tests) {
-            const createdTest = await Test.create({input: test.input, output: test.output});
+            const createdTest = await Test.create({givenInput: test.input, expectedOutput: test.output});
             createdTests.push(createdTest);
             createdTestsIds.push(createdTest._id);
         }
 
-        await Task.create({name: name, date: date, difficulty: difficulty, deadline: deadline, description: description, tests: createdTestsIds})
+        await Task.create({name: name, date: date, difficulty: difficulty, language: language, description: description, tests: createdTestsIds})
             .then((task) => {
                 return res.status(StatusCodes.CREATED).send({task, createdTests});
             });
@@ -92,7 +92,7 @@ router.put('/:id', async (req: any, res: any, next: any) => {
         return res.status(StatusCodes.UNAUTHORIZED);
     }
     const { id } = req.params;
-    const {name, difficulty, deadline, description, tests} = req.body;
+    const {name, difficulty, language, description, tests} = req.body;
 
     const createdTests = <any>[];
     const createdTestsIds = <any>[];
@@ -125,7 +125,7 @@ router.put('/:id', async (req: any, res: any, next: any) => {
 
         const newTests = [...updatedTestsIds, ...createdTestsIds];
 
-        await Task.updateOne({_id: id}, {name: name, date: date, difficulty: difficulty, deadline: deadline, description: description, tests: newTests});
+        await Task.updateOne({_id: id}, {name: name, date: date, difficulty: difficulty, language: language, description: description, tests: newTests});
 
         const updatedTask = await Task.findById(id);
 

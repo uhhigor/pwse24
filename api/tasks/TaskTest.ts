@@ -13,11 +13,11 @@ const testSchema = new Schema({
     task: {
         type: Schema.Types.ObjectId,
         ref: 'Task',
-        required: true
+        //required: true
     },
     textBlob: {
         type: Schema.Types.Buffer,
-        required: true
+        //required: true
     }
 });
 

@@ -8,14 +8,15 @@ type Task = {
     _id: string;
     name: string;
     description: string;
-    deadline: Date;
+    difficulty: string;
+    language: string;
 };
 
 const TasksPage: React.FC = () => {
     const [tasks, setTasks] = useState<Task[]>([]);
 
     function showTasks() {
-        axios.get(process.env.REACT_APP_API_ADDRESS + "/admin/tasks").then((response) => {
+        axios.get(process.env.REACT_APP_API_ADDRESS + "/task").then((response) => {
             setTasks(response.data);
         }).catch((err) => {
             console.log("Error: " + err.response.data);
@@ -39,7 +40,8 @@ const TasksPage: React.FC = () => {
                                 <tr>
                                     <th>Name</th>
                                     <th>Description</th>
-                                    <th>Deadline</th>
+                                    <th>Difficulty</th>
+                                    <th>Language</th>
                                     <th>Actions</th>
                                 </tr>
                                 </thead>
@@ -48,7 +50,8 @@ const TasksPage: React.FC = () => {
                                     <tr key={index}>
                                         <td>{task.name}</td>
                                         <td>{task.description}</td>
-                                        <td>{task.deadline.toString().substring(0,10) + ", " + task.deadline.toString().substring(11, 19)}</td>
+                                        <td>{task.difficulty}</td>
+                                        <td>{task.language}</td>
                                         <td>
                                             <Link to={`/tasks/${task._id}`}>Solve the problem</Link>
                                         </td>
