@@ -2,8 +2,8 @@ import express from 'express';
 const router = express.Router();
 
 import {StatusCodes} from "http-status-codes";
-import User from "../auth/models/User";
-import {hashPassword, comparePassword} from "../auth/bcrypt";
+import User from "../auth/model/User";
+import {hashPassword, comparePassword} from "../auth/bcrypt/bcrypt";
 import {generateToken, verifyToken} from "../auth/jwt/jwt";
 
 // POST login, returns token

@@ -2,23 +2,16 @@ import express from 'express';
 const router = express.Router();
 
 import {StatusCodes} from "http-status-codes";
-import Task from '../auth/models/Task';
-import mongoose from "mongoose";
 import {authenticateToken} from "../auth/jwt/jwt";
-import Test from '../auth/models/Test';
+import Task from "../tasks/Task";
+import Test from "../tasks/TaskTest";
 
 // Authenticate token
 router.use(function(req: any, res: any, next: any) {
     authenticateToken(req, res, next);
 });
 
-// Tasks
-
-router.get('/tasks', (req: any, res: any, next: any) => {
-    // if (req.currentUser.role !== "admin") {
-    //     return res.status(StatusCodes.UNAUTHORIZED);
-    // }
-
+router.get('/', (req: any, res: any, next: any) => {
     Task.find()
         .then((tasks) => {
             return res.status(StatusCodes.OK).send(tasks);
@@ -28,10 +21,13 @@ router.get('/tasks', (req: any, res: any, next: any) => {
         })
 });
 
-router.get('/tasks/:id', (req: any, res: any, next: any) => {
+router.get('/:id', (req: any, res: any, next: any) => {
     const { id } = req.params;
-     Task.findById(id)
+    Task.findById(id)
         .then((task) => {
+            if (!task) {
+                return res.status(StatusCodes.NOT_FOUND).send('Task not found');
+            }
             return res.status(StatusCodes.OK).send(task);
         })
         .catch((err) => {
@@ -40,26 +36,26 @@ router.get('/tasks/:id', (req: any, res: any, next: any) => {
 });
 
 
-router.post('/addTask', async (req: any, res: any, next: any) => {
-    if (req.currentUser.role !== "admin") {
+router.post('/', async (req: any, res: any, next: any) => {
+    /*if (req.currentUser.role !== "admin") {
         return res.status(StatusCodes.UNAUTHORIZED);
-    }
-    const {name, difficulty, deadline, description, tests} = req.body;
+    }*/
+    const {name, difficulty, language, description, tests} = req.body;
     const date = new Date();
     const createdTests = <any>[];
     const createdTestsIds = <any>[];
 
     try {
         for (const test of tests) {
-            const createdTest = await Test.create({input: test.input, output: test.output});
+            const createdTest = await Test.create({givenInput: test.input, expectedOutput: test.output});
             createdTests.push(createdTest);
             createdTestsIds.push(createdTest._id);
         }
 
-        await Task.create({name: name, date: date, difficulty: difficulty, deadline: deadline, description: description, tests: createdTestsIds})
-        .then((task) => {
-            return res.status(StatusCodes.CREATED).send({task, createdTests});
-        });
+        await Task.create({name: name, date: date, difficulty: difficulty, language: language, description: description, tests: createdTestsIds})
+            .then((task) => {
+                return res.status(StatusCodes.CREATED).send({task, createdTests});
+            });
 
     } catch (err: any) {
         console.error(err);
@@ -67,7 +63,7 @@ router.post('/addTask', async (req: any, res: any, next: any) => {
     }
 });
 
-router.delete('/deleteTask/:id', async (req: any, res: any, next: any) => {
+router.delete('/:id', async (req: any, res: any, next: any) => {
     console.log(req.currentUser);
     if (req.currentUser.role !== "admin") {
         return res.status(StatusCodes.UNAUTHORIZED);
@@ -82,7 +78,6 @@ router.delete('/deleteTask/:id', async (req: any, res: any, next: any) => {
         }
 
         await Test.deleteMany({_id: { $in: deletedTask.tests }});
-
         await Task.deleteOne({ _id: id });
 
         return res.status(StatusCodes.NO_CONTENT).send();
@@ -92,12 +87,12 @@ router.delete('/deleteTask/:id', async (req: any, res: any, next: any) => {
     }
 });
 
-router.put('/editTask/:id', async (req: any, res: any, next: any) => {
+router.put('/:id', async (req: any, res: any, next: any) => {
     if (req.currentUser.role !== "admin") {
         return res.status(StatusCodes.UNAUTHORIZED);
     }
     const { id } = req.params;
-    const {name, difficulty, deadline, description, tests} = req.body;
+    const {name, difficulty, language, description, tests} = req.body;
 
     const createdTests = <any>[];
     const createdTestsIds = <any>[];
@@ -130,8 +125,8 @@ router.put('/editTask/:id', async (req: any, res: any, next: any) => {
 
         const newTests = [...updatedTestsIds, ...createdTestsIds];
 
-        await Task.updateOne({_id: id}, {name: name, date: date, difficulty: difficulty, deadline: deadline, description: description, tests: newTests});
-        
+        await Task.updateOne({_id: id}, {name: name, date: date, difficulty: difficulty, language: language, description: description, tests: newTests});
+
         const updatedTask = await Task.findById(id);
 
         return res.status(StatusCodes.OK).send({task: updatedTask, createdTests});
@@ -141,43 +136,6 @@ router.put('/editTask/:id', async (req: any, res: any, next: any) => {
         console.error(err);
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(err.message);
     }
-});
-
-// Tests
-
-router.get('/tests', (req: any, res: any, next: any) => {
-    // if (req.currentUser.role !== "admin") {
-    //     return res.status(StatusCodes.UNAUTHORIZED);
-    // }
-
-    Test.find()
-        .then((tests) => {
-            return res.status(StatusCodes.OK).send(tests);
-        })
-        .catch((err) => {
-            return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(err.message);
-        })
-});
-
-router.get('/tests/:id', (req: any, res: any, next: any) => {
-    const { id } = req.params;
-
-    Task.findById(id)
-        .then((task) => {
-            if (!task) {
-                return res.status(StatusCodes.NOT_FOUND).send('Task not found');
-            }
-            Test.find({_id: { $in: task.tests }})
-                .then((tests) => {
-                    return res.status(StatusCodes.OK).send(tests);
-                })
-                .catch((err) => {
-                    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(err.message);
-                })
-        })
-        .catch((err) => {
-            return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(err.message);
-        })
 });
 
 module.exports = router;
