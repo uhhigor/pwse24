@@ -50,6 +50,7 @@ function requestLogin(event: any) {
                 console.log(response.data);
                 window.location.href = '/tasks';
                 localStorage.setItem("email", email.val() as string);
+                localStorage.setItem("token", response.data.token);
             }).catch((err) => {
             console.log("Error: " + err.response.data);
         });

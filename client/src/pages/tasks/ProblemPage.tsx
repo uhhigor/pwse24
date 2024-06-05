@@ -33,6 +33,7 @@ const ProblemPage: React.FC = () => {
 
     const getTests = () => {
         axios.get(process.env.REACT_APP_API_ADDRESS + "/tasktest/task/" + index)
+        // axios.get(process.env.REACT_APP_API_ADDRESS + "/tests/" + index)
             .then((response) => {
                 setTests(response.data);
             }).catch((err) => {
