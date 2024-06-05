@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useImperativeHandle, forwardRef } from 'react';
 import * as CodeMirror from 'codemirror';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/material.css';
@@ -11,9 +11,16 @@ interface CodeEditorProps {
     language?: string;
 }
 
-const CodeEditor: React.FC<CodeEditorProps> = ({ language}) => {
+const CodeEditor = forwardRef((props: CodeEditorProps, ref) => {
+    const { language } = props;
     const textareaRef = useRef<HTMLTextAreaElement | null>(null);
     const editorRef = useRef<EditorFromTextArea | null>(null);
+
+    useImperativeHandle(ref, () => ({
+        getValue: () => {
+            return editorRef.current?.getValue() || '';
+        }
+    }));
 
     useEffect(() => {
         if (textareaRef.current) {
@@ -23,15 +30,14 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ language}) => {
                 theme: 'material',
             });
 
-            if (language === 'javascript'){
+            if (language === 'javascript') {
                 editorRef.current.setValue("console.log('Hello, World!')");
-            } else if (language === 'python'){
+            } else if (language === 'python') {
                 editorRef.current.setValue("print('Hello, World!')");
             }
         }
 
         return () => {
-            // Clean up CodeMirror instance
             if (editorRef.current) {
                 editorRef.current.toTextArea();
             }
@@ -43,6 +49,6 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ language}) => {
             <textarea ref={textareaRef} />
         </div>
     );
-};
+});
 
 export default CodeEditor;

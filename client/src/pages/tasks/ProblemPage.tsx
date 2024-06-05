@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import {useParams} from "react-router";
+import React, { useEffect, useState, useRef } from 'react';
+import { useParams } from "react-router";
 import "../../style/ProblemPage.css";
 import CodeEditor from "../../CodeEditor";
 import axios from 'axios';
@@ -23,6 +23,7 @@ const ProblemPage: React.FC = () => {
     let index = useParams().id;
     const [task, setTask] = useState<Task>();
     const [tests, setTests] = useState<Test[]>();
+    const editorRef = useRef<any>(null); // Create a ref for the CodeEditor
 
     const getProblem = () => {
         axios.get(process.env.REACT_APP_API_ADDRESS + "/task/" + index)
@@ -43,23 +44,28 @@ const ProblemPage: React.FC = () => {
     }
 
     const submitSolution = () => {
+        const solution = editorRef.current?.getValue();
         let data = {
-            language:"python",
-            solution:"def solution(a,b):\n\treturn a+b",
-            taskID:2137
+            language: task?.language.toLowerCase(),
+            solution: solution,
+            taskID: task?._id
         }
-        axios.post(process.env.REACT_APP_API_ADDRESS + '/tester/check',data)
+        axios.post(process.env.REACT_APP_API_ADDRESS + '/tester/check', data)
+            .then((response) => {
+                console.log(response.data);
+            }).catch((err) => {
+            console.log("Error: " + err.response.data);
+        });
     }
 
     useEffect(() => {
         getProblem();
         getTests();
-    }   , []);
+    }, []);
 
     const goBack = () => {
         window.history.back();
     }
-
 
     return (
         <div className="problemPage-container">
@@ -73,7 +79,7 @@ const ProblemPage: React.FC = () => {
             <div className="row codingRow mt-5">
                 <div className="col-md-8 mx-5">
                     <div className="code-editor-container">
-                        <CodeEditor language={task?.language.toLowerCase()}/>
+                        <CodeEditor ref={editorRef} language={task?.language.toLowerCase()} />
                     </div>
                     <div className="row">
                         <button className="btn btn-lg mt-4 ms-2 submitButtonPP" onClick={submitSolution}>Submit</button>
@@ -90,10 +96,10 @@ const ProblemPage: React.FC = () => {
                                 <p>Output: {test.expectedOutput}</p>
                             </div>
                         ))}
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
     );
 };
 
