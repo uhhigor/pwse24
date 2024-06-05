@@ -37,7 +37,6 @@ router.get('/:email', function (req: any, res: any, next: any) {
 // GET all users, returns array of users
 
 router.get('/', function (req: any, res: any, next: any) {
-    if (req.currentUser.role !== "admin") return res.status(StatusCodes.UNAUTHORIZED).send("Unauthorized");
     User.find().then((users) => {
         return res.status(StatusCodes.OK).send(users);
     }).catch((err) => {

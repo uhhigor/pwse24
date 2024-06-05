@@ -1,0 +1,54 @@
+body {
+    overflow: hidden;
+}
+
+div.home-container {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    flex-direction: column;
+    justify-content: center;
+}
+
+div.home-container div.home-header {
+    color: rgb(170, 226, 228);
+    top: 10px;
+    position: absolute;
+    border-radius: 20px;
+    border-style: double;
+    padding: 15px;
+    text-align: center;
+    cursor: default;
+    background-color: #2525251c;
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+}
+
+div.home-container div.home-header h1 {
+    font-size: 7rem;
+}
+
+div.home-container div.options-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+}
+
+div.home-container div.option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 8rem;
+    color: rgb(170, 226, 228);
+    cursor: pointer;
+    margin-top: 3rem;
+}
+
+div.home-container div.option:hover {
+    color: rgb(134, 221, 224);
+}
+
+div.home-container div.option span {
+    font-size: 3rem;
+}
