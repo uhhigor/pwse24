@@ -50,7 +50,7 @@ const ProblemPage: React.FC = () => {
             solution: solution,
             taskID: task?._id
         }
-        axios.post(process.env.REACT_APP_API_ADDRESS + '/tester/check', data)
+        axios.post(process.env.REACT_APP_API_ADDRESS + '/check', data)
             .then((response) => {
                 console.log(response.data);
             }).catch((err) => {
@@ -69,7 +69,7 @@ const ProblemPage: React.FC = () => {
 
     return (
         <div className="problemPage-container">
-            <h1 className="my-5">Problem {task?.name}</h1>
+            <h1 className="my-5">{task?.name}</h1>
             <div className="row">
                 <p>Name: {task?.name}</p>
                 <p>Difficulty: {task?.difficulty} </p>
