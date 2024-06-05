@@ -5,14 +5,16 @@ import CodeEditor from "../../CodeEditor";
 import axios from 'axios';
 
 type Task = {
+    _id: string;
     name: string;
-    difficulty: string;
     description: string;
-    language: string;
     tests: Test[];
-};
+    difficulty: string;
+    language: string;
+}
 
 type Test = {
+    id: string;
     givenInput: string;
     expectedOutput: string;
 }
@@ -33,7 +35,6 @@ const ProblemPage: React.FC = () => {
 
     const getTests = () => {
         axios.get(process.env.REACT_APP_API_ADDRESS + "/tasktest/task/" + index)
-        // axios.get(process.env.REACT_APP_API_ADDRESS + "/tests/" + index)
             .then((response) => {
                 setTests(response.data);
             }).catch((err) => {
@@ -66,13 +67,13 @@ const ProblemPage: React.FC = () => {
             <div className="row">
                 <p>Name: {task?.name}</p>
                 <p>Difficulty: {task?.difficulty} </p>
-                <p>Language: {task?.language} </p>
                 <p>Description: {task?.description} </p>
+                <p>Language: {task?.language} </p>
             </div>
             <div className="row codingRow mt-5">
                 <div className="col-md-8 mx-5">
                     <div className="code-editor-container">
-                        <CodeEditor initialValue="console.log('Hello, world!');"/>
+                        <CodeEditor language={task?.language.toLowerCase()}/>
                     </div>
                     <div className="row">
                         <button className="btn btn-lg mt-4 ms-2 submitButtonPP" onClick={submitSolution}>Submit</button>
