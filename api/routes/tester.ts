@@ -1,20 +1,36 @@
 import {type} from "os";
 
 let express = require('express');
+
 const router = express.Router();
 let test1 = require('fs').readFileSync('./docker/python/main.py').toString()
 let test2 = require('fs').readFileSync('./docker/python/main2.py').toString()
 import {getContainer,Images} from '../tester/dispatcher'
+import axios from "axios";
 // import Task from '../tasks/Task'
 
+
+// POST requires in body:
+// Solution
+// taskID
+// userID
 router.post("/check",async (req:any,res:any) => {
     console.log(req.body);
-    const {language,solution,taskID} = req.body;
+    const {solution,taskID,userID} = req.body;
 
+    //reading from db
+    let task = (await axios.get("http://localhost:3000/task/"+taskID)).data
+    let testsT = (await axios.get("http://localhost:3000/tasktest/task/"+taskID)).data
+    // getting language
+    let language = task.language.toLowerCase()
+    //this one will be changed for one from db
+    // let testt1:Record<any, any> = {name:"test1",body:test1};
+    // let testt2:Record<any, any> = {name:"test2",body:test2};
+    // let tests = [testt1,testt2]
+    let tests = testsT
+    tests.forEach((t:any) => t.passed=false)
 
-    // changing for reading from DB in the future
-    let tests = [{name:"test1",body:test1,passed:false},{name:"test2",body:test2,passed: false}];
-    let result = await Promise.all(tests.map(async (test:{name:string,body:string,passed:boolean}) => {
+    let result = await Promise.all(tests.map(async (test:any) => {
         let func = getContainer(language)
         if(typeof func == 'function') {
             let {body,passed} = await func(test.body, solution)
@@ -24,22 +40,8 @@ router.post("/check",async (req:any,res:any) => {
         return test;
     }))
 
-    // result = result.map((res:any) => {
-    //     let passed = (res.body.charAt(res.body.length - 1) == "0");
-    //     res.body = res.body.slice(0,-1)
-    //     res.passed = passed;
-    //     return res;
-    // })
     res.json(result)
 
-    // containers[language](test1,solution).then((result:string) => {
-    //     res.send(result)
-    // }).catch((err:any) => {
-    //     res.send(err)
-    // })
-    // const task:any = Task.findById(taskID);
-    // task.get("tests")
-    // const tests = task.get("tests");
 })
 
 module.exports = router;

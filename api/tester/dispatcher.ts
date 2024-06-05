@@ -86,12 +86,18 @@ let createTester =  (image: string, command: DockerCommand) => {
 export let python= createTester("python:latest",(main, solution) => {
     return ['sh','-c',`echo "${main}" > main.py && echo "${solution}" > solution.py && python -m unittest -v main.py`]
 })
+export let javascript = createTester("jstest:latest",(main,solution) => {
+    return ['sh', '-c',`echo "${main}" > main.test.js && echo "${solution}" > solution.js &&npx jest main.test.js`]
+})
+
 export enum Images{
-    pythonImage = "python"
+    pythonImage = "python",
+    jsImage = "javascript"
 }
 export let getContainer = (name:string) => {
     switch (name){
         case Images.pythonImage: return python
+        case Images.jsImage: return javascript
         default: return "Language "+name+" is not implemented";
     }
 };
