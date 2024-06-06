@@ -3,6 +3,7 @@ import { useParams } from "react-router";
 import "../../style/ProblemPage.css";
 import CodeEditor from "../../CodeEditor";
 import axios from 'axios';
+import ResultsPopup from "./ResultsPopup";
 
 type Task = {
     _id: string;
@@ -19,11 +20,20 @@ type Test = {
     expectedOutput: string;
 }
 
+type TestResult = {
+    _id: string;
+    body: string;
+    passed: boolean;
+}
+
+
 const ProblemPage: React.FC = () => {
     let index = useParams().id;
     const [task, setTask] = useState<Task>();
     const [tests, setTests] = useState<Test[]>();
-    const editorRef = useRef<any>(null); // Create a ref for the CodeEditor
+    const editorRef = useRef<any>(null);
+    const [testResults, setTestResults] = useState<TestResult[]>();
+    const [isPopupVisible, setPopupVisible] = useState(true);
 
     const getProblem = () => {
         axios.get(process.env.REACT_APP_API_ADDRESS + "/task/" + index)
@@ -43,6 +53,7 @@ const ProblemPage: React.FC = () => {
         });
     }
 
+
     const submitSolution = () => {
         const solution = editorRef.current?.getValue();
         let data = {
@@ -52,7 +63,8 @@ const ProblemPage: React.FC = () => {
         }
         axios.post(process.env.REACT_APP_API_ADDRESS + '/check', data)
             .then((response) => {
-                console.log(response.data);
+                setTestResults(response.data);
+                setPopupVisible(true);
             }).catch((err) => {
             console.log("Error: " + err.response.data);
         });
@@ -61,11 +73,16 @@ const ProblemPage: React.FC = () => {
     useEffect(() => {
         getProblem();
         getTests();
+        console.log(isPopupVisible)
     }, []);
 
     const goBack = () => {
         window.history.back();
     }
+
+    const handleClosePopup = () => {
+        setPopupVisible(false);
+    };
 
     return (
         <div className="problemPage-container">
@@ -99,6 +116,8 @@ const ProblemPage: React.FC = () => {
                     </div>
                 </div>
             </div>
+
+            <ResultsPopup testResults={testResults} isOpen={isPopupVisible} onClose={handleClosePopup} />
         </div>
     );
 };
