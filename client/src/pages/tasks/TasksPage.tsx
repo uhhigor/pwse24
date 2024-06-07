@@ -82,7 +82,6 @@ const TasksPage: React.FC = () => {
                                     <tr key={task._id}>
                                         <td>{index + 1}</td>
                                         <td>{task.name}</td>
-                                        <td>{task.description}</td>
                                         <td>{substringDescription(task.description)}</td>
                                         <td>{task.difficulty}</td>
                                         <td>{task.language}</td>
