@@ -61,7 +61,7 @@ const ProblemPage: React.FC = () => {
             solution: solution,
             taskID: task?._id
         }
-        axios.post(process.env.REACT_APP_API_ADDRESS + '/check', data)
+        axios.post(process.env.REACT_APP_API_ADDRESS + '/tester/check', data)
             .then((response) => {
                 setTestResults(response.data);
                 setPopupVisible(true);
