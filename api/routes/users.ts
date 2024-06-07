@@ -22,7 +22,7 @@ router.get('/:email', function (req: any, res: any, next: any) {
     }
     User.findOne({email: req.params.email}).then((user) => {
         if (user) {
-            if (user.email === req.currentUser.email || req.currentUser.role === "admin")
+            if (user.email === req.params.email || req.params.role === "admin")
                 return res.status(StatusCodes.OK).send(user);
             else
                 return res.status(StatusCodes.UNAUTHORIZED).send("Unauthorized");
