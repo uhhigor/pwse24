@@ -31,9 +31,19 @@ const CodeEditor = forwardRef((props: CodeEditorProps, ref) => {
             });
 
             if (language === 'javascript') {
-                editorRef.current.setValue("console.log('Hello, World!')");
+                let txt = `
+function solution(a){
+    console.log("Hello, World")                
+}
+               
+module.exports = { solution }`
+                editorRef.current.setValue(txt);
             } else if (language === 'python') {
-                editorRef.current.setValue("print('Hello, World!')");
+                let txt = `
+def solution(a):
+    print("Hello, World")
+                `
+                editorRef.current.setValue(txt);
             }
         }
 

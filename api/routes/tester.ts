@@ -55,14 +55,15 @@ router.post("/check",async (req:any,res:any) => {
         console.log(t.body)
         return {
             _id: t._id,
-            body: t.body,
+            givenInput: t.givenInput,
+            expectedOutput:t.expectedOutput,
             passed: false
         }
     })
     let result = await Promise.all(tests.map(async (test:any) => {
         let func = getContainer(language)
         if(typeof func == 'function') {
-            let {body,passed} = await func(test.body, solution)
+            let {body,passed} = await func(test.givenInput,test.expectedOutput, solution)
             test.body = body;
             test.passed = passed
         } else res.status(StatusCodes.NOT_FOUND).send(func)

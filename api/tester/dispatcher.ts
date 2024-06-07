@@ -4,7 +4,7 @@ let Docker = require('dockerode');
 let fs = require('node:fs');
 let docker = new Docker();
 
-type DockerCommand = (main:string,solution:string) => string[]
+type DockerCommand = (given:string,expected:string,solution:string) => string[]
 
 let ensureImage = (image:string) => {
     return new Promise((resolve:any, reject:any) => {
@@ -27,7 +27,7 @@ let ensureImage = (image:string) => {
 type Result = {body:string,passed:boolean}
 let createTester =  (image: string, command: DockerCommand) => {
 
-    return (main: string, solution: string) => {
+    return (given: string,expected:string, solution: string) => {
         return new Promise<Result>((resolve, reject) => {
             let result: string = '';
             docker.createContainer({
@@ -40,7 +40,7 @@ let createTester =  (image: string, command: DockerCommand) => {
             }, (err: any, container: any) => {
                 container.start((err: any, start: any) => {
                     container.exec({
-                        Cmd: command(main, solution),
+                        Cmd: command(given,expected, solution),
                         AttachStdout: true,
                         AttachStderr: true
                     }, (err: any, exec: any) => {
@@ -72,6 +72,7 @@ let createTester =  (image: string, command: DockerCommand) => {
 
 
                                 container.stop((err: any, stop: any) => {
+                                    console.log("container removing")
                                     container.remove();
                                 })
                             });
@@ -83,11 +84,29 @@ let createTester =  (image: string, command: DockerCommand) => {
     }
 }
 
-export let python= createTester("python:latest",(main, solution) => {
+export let python= createTester("python:latest",(given,expected, solution) => {
+    let main = `
+import unittest
+from solution import solution
+class Testing(unittest.TestCase):
+    def test(self):
+        self.assertTrue(solution(${given}),${expected})
+if __name__ == '__main__':
+    unittest.main()`
     return ['sh','-c',`echo "${main}" > main.py && echo "${solution}" > solution.py && python -m unittest -v main.py`]
 })
-export let javascript = createTester("jstest:latest",(main,solution) => {
-    return ['sh', '-c',`echo "${main}" > main.test.js && echo "${solution}" > solution.js &&npx jest main.test.js`]
+export let javascript = createTester("jstest:latest",(given,expected,solution) => {
+    let main = `
+    let {solution} = require('./solution')
+
+    describe('', () => {
+    test('', () => {
+        expect(solution(${given})).toBe(${expected});
+    });
+})
+    `
+    console.log(main)
+    return ['sh', '-c',`echo "${main}" > main.test.js && echo "${solution}" > solution.js && npx jest main.test.js`]
 })
 
 export enum Images{
