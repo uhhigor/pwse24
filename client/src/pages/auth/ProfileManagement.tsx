@@ -44,7 +44,7 @@ const ProfileManagement: React.FC = () => {
     let navigate = useNavigate();
 
     const goBack = () => {
-        navigate(-1);
+        navigate("/home");
     };
 
     function everythingIsFilled(): boolean {
