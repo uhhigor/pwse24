@@ -2,10 +2,8 @@ import express from 'express';
 const router = express.Router();
 
 import {StatusCodes} from "http-status-codes";
-import User from "../auth/models/User";
 import mongoose from "mongoose";
 import {authenticateToken} from "../auth/jwt/jwt";
-import Task from "../auth/models/Task";
 import TaskSolution from "../tasks/TaskSolution";
 
 // Authenticate token
@@ -13,19 +11,24 @@ router.use(function(req: any, res: any, next: any) {
     authenticateToken(req, res, next);
 });
 
-// GET all tasks solutions
+// GET all tasks solutions by task id
 
-router.get('/', function(req: any, res: any, next: any) {
-    if(req.currentUser.role !== "admin") return res.status(StatusCodes.UNAUTHORIZED).send("Unauthorized");
-    TaskSolution.find().then((solutions) => {
+router.get('/task/:taskid', function(req: any, res: any, next: any) {
+    if (req.currentUser.role !== "admin") return res.status(StatusCodes.UNAUTHORIZED).send("Unauthorized");
+
+    let taskId = req.params.taskId;
+    if(!mongoose.isValidObjectId(taskId)) {
+        return res.status(StatusCodes.BAD_REQUEST).send("Invalid id");
+    }
+    TaskSolution.find({taskId: taskId}).then((solutions) => {
+        if(!solutions) return res.status(StatusCodes.NOT_FOUND).send("Solutions not found");
         return res.status(StatusCodes.OK).send(solutions);
     }).catch((err) => {
         return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(err.message);
     });
 });
 
-// GET task solution
-
+// GET task solution by id
 router.get('/:id', function(req: any, res: any, next: any) {
     if(!mongoose.isValidObjectId(req.params.id)) {
         return res.status(StatusCodes.BAD_REQUEST).send("Invalid id");
@@ -41,41 +44,21 @@ router.get('/:id', function(req: any, res: any, next: any) {
     });
 });
 
-// POST add task solution
-router.post('/', function(req: any, res: any, next: any) {
-    if(!mongoose.isValidObjectId(req.params.id)) {
+// POST add task solution to task
+router.post('/task/:taskid', function(req: any, res: any, next: any) {
+    let taskId = req.params.taskid;
+    if(!mongoose.isValidObjectId(taskId)) {
         return res.status(StatusCodes.BAD_REQUEST).send("Invalid id");
     }
-    const { userId, taskId, score } = req.body;
-    if (!userId || !taskId || !score) {
+    const { userId, score, textBlob } = req.body;
+    if (!userId || !score || !textBlob) {
         return res.status(StatusCodes.BAD_REQUEST).send("Missing parameters");
     }
-    let filePath = null;
-    TaskSolution.create({userId, taskId, filePath, score}).then((user) => {
-        if (user) {
-            return res.status(StatusCodes.OK).send(user);
+    TaskSolution.create({userId, taskId, textBlob, score}).then((solution) => {
+        if (solution) {
+            return res.status(StatusCodes.OK).send(solution);
         } else {
-            return res.status(StatusCodes.NOT_FOUND).send("User not found");
-        }
-    }).catch((err) => {
-        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(err.message);
-    });
-});
-
-// PUT update task solution
-router.put('/:id', function(req: any, res: any, next: any) {
-    if(!mongoose.isValidObjectId(req.params.id)) {
-        return res.status(StatusCodes.BAD_REQUEST).send("Invalid id");
-    }
-    const { userId, taskId, score } = req.body;
-    if (!userId || !taskId || !score) {
-        return res.status(StatusCodes.BAD_REQUEST).send("Missing parameters");
-    }
-    TaskSolution.findByIdAndUpdate(req.params.id, req.body).then((user) => {
-        if (user) {
-            return res.status(StatusCodes.OK).send(user);
-        } else {
-            return res.status(StatusCodes.NOT_FOUND).send("User not found");
+            return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send("Error while saving solution");
         }
     }).catch((err) => {
         return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(err.message);

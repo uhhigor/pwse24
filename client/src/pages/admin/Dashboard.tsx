@@ -26,19 +26,9 @@ export const Dashboard = () => {
     }, [tasks, tests])
 
     useEffect(() => {
-        axios.get(process.env.REACT_APP_API_ADDRESS + "/admin/tasks")
+        axios.get(process.env.REACT_APP_API_ADDRESS + "/task/")
             .then((response) => {
                 setTasks(response.data);
-            })
-            .catch((err) => {
-                console.error(err);
-                if (err.response.status === 401) {
-                    navigate('/login');
-                }
-            });
-        axios.get(process.env.REACT_APP_API_ADDRESS + "/admin/tests")
-            .then((response) => {
-                setTests(response.data);
             })
             .catch((err) => {
                 console.error(err);
@@ -59,7 +49,7 @@ export const Dashboard = () => {
     }, [])
 
     const handleDelete = (task: any) => {
-        axios.delete(process.env.REACT_APP_API_ADDRESS + "/admin/deleteTask/" + task._id)
+        axios.delete(process.env.REACT_APP_API_ADDRESS + "/task/" + task._id)
         .then((response) => {
             if (response.status === 204) {
                 let newTests = [...tests];

@@ -21,7 +21,7 @@ export const AddProblemForm = ({setTasks, setOldTests}: any) => {
     }
 
     const handleSubmit = () => {
-        axios.post(process.env.REACT_APP_API_ADDRESS + "/admin/addTask", {
+        axios.post(process.env.REACT_APP_API_ADDRESS + "/task/", {
             name: name,
             difficulty: difficulty,
             deadline: deadline,
