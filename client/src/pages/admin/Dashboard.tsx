@@ -257,7 +257,18 @@ export const Dashboard = () => {
             <TestPopup test={testInfo}/>
             <AddProblemForm setTasks={setTasks} setOldTests={setTests}/>
             <EditProblemForm setTasks={setTasks} setOldTests={setTests} editingTask={editingTask} existingTests={tests} />
-
+            <div className="row">
+                <div className="col-4">
+                    <button
+                        className="btn tab-btn mt-3 ms-3"
+                        onClick={() => {
+                            navigate('/tasks');
+                        }}
+                    >
+                        Go back
+                    </button>
+                </div>
         </div>
+    </div>
     )
 }

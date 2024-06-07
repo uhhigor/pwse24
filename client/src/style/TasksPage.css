@@ -51,7 +51,7 @@
 
 .TaskPage .table-container {
     width: 100%;
-    max-width: 800px;
+    max-width: 1000px;
 }
 
 .goToDashboardButton {
@@ -67,6 +67,44 @@
 .goToDashboardButton:hover {
     background: #007bff !important;
 }
+
+.goToDashboardButton {
+    width: 40% !important;
+    padding: 10px;
+    font-size: 13px !important;
+    background: #4e85d0 !important;
+    border: none !important;
+    border-bottom: 2px solid #007bff !important;
+    color: white !important;
+    outline: none;
+}
+.goToDashboardButton:hover {
+    background: #007bff !important;
+}
+.logOutButton {
+    width: 20% !important;
+    padding: 5px;
+    font-size: 12px !important;
+    background: #445c7e !important;
+    border: none !important;
+    border-bottom: 2px solid #204f81 !important;
+    color: white !important;
+    outline: none;
+}
+.logOutButton:hover {
+    background: #ff0026 !important;
+    border-bottom: 2px solid #81203a !important;
+
+}
+
+.logOuticon {
+    width: 20% !important;
+    padding: 5px;
+    font-size: 12px !important;
+    border: none !important;
+    outline: none;
+}
+
 
 
 .TaskPage .table-responsive {
