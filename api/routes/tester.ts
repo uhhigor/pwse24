@@ -1,13 +1,42 @@
-import {type} from "os";
+import {getContainer} from '../tester/dispatcher'
+import Task from "../tasks/Task";
+import Test from "../tasks/TaskTest";
+import mongoose from "mongoose";
+import {StatusCodes} from "http-status-codes";
 
 let express = require('express');
 
 const router = express.Router();
-let test1 = require('fs').readFileSync('./docker/python/main.py').toString()
-let test2 = require('fs').readFileSync('./docker/python/main2.py').toString()
-import {getContainer,Images} from '../tester/dispatcher'
-import axios from "axios";
-// import Task from '../tasks/Task'
+
+let getTests = async (taskId:any) :Promise<any> => {
+    try {
+        if (!mongoose.Types.ObjectId.isValid(taskId)) {
+            return Promise.reject( 'Invalid task id');
+        }
+
+        const task = await Task.findById(taskId);
+        if (!task) {
+            return Promise.reject('Task not found');
+        }
+
+        const tests = await Test.find({ _id: { $in: task.tests } });
+        return Promise.resolve(tests);
+    } catch (err:any) {
+        return Promise.reject(err.message );
+    }
+};
+
+let getTask = async (id:any) => {
+    try {
+        const task = await Task.findById(id);
+        if (!task) {
+            return Promise.reject( 'Task not found');
+        }
+        return Promise.resolve(  task );
+    } catch (err:any) {
+        return Promise.reject(err.message );
+    }
+};
 
 
 // POST requires in body:
@@ -15,28 +44,28 @@ import axios from "axios";
 // taskID
 // userID
 router.post("/check",async (req:any,res:any) => {
-    console.log(req.body);
     const {solution,taskID,userID} = req.body;
 
-    //reading from db
-    let task = (await axios.get("http://localhost:3000/task/"+taskID)).data
-    let testsT = (await axios.get("http://localhost:3000/tasktest/task/"+taskID)).data
-    // getting language
-    let language = task.language.toLowerCase()
-    //this one will be changed for one from db
-    // let testt1:Record<any, any> = {name:"test1",body:test1};
-    // let testt2:Record<any, any> = {name:"test2",body:test2};
-    // let tests = [testt1,testt2]
-    let tests = testsT
-    tests.forEach((t:any) => t.passed=false)
+    let task = await getTask(taskID).catch((e:any) => res.status(StatusCodes.NOT_FOUND).send(e));
+    let testsT = await getTests(taskID).catch((e:any) => res.status(StatusCodes.NOT_FOUND).send(e));
+    let language:string = task.language.toLowerCase()
 
+    let tests = testsT.map((t:any) => {
+        console.log("Map")
+        console.log(t.body)
+        return {
+            _id: t._id,
+            body: t.body,
+            passed: false
+        }
+    })
     let result = await Promise.all(tests.map(async (test:any) => {
         let func = getContainer(language)
         if(typeof func == 'function') {
             let {body,passed} = await func(test.body, solution)
             test.body = body;
             test.passed = passed
-        }else res.send(func)
+        } else res.status(StatusCodes.NOT_FOUND).send(func)
         return test;
     }))
 
