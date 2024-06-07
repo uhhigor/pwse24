@@ -44,8 +44,7 @@ const ProfileManagement: React.FC = () => {
     let navigate = useNavigate();
 
     const goBack = () => {
-        const path = `/tasks`;
-        navigate(path);
+        navigate("/home");
     };
 
     function everythingIsFilled(): boolean {

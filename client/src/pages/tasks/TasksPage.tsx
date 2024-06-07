@@ -98,12 +98,7 @@ const TasksPage: React.FC = () => {
             </div>
             <div className="row">
                 <Link to={'/dashboard'} className="btn ms-3 goToDashboardButton">Go to Dashboard</Link>
-                <Link to={`/profileManagement/${encodeURIComponent(getEmail() as string)}`}
-                      className="btn ms-3 goToDashboardButton">Go to your profile</Link>
-            </div>
-            <div className="row align-items-center">
-                <CgLogOut size={30} className="logOuticon"/>
-                <button onClick={logOut} className="btn btn-sm logOutButton my-5">Log out</button>
+                <Link to={'/home'} className="btn ms-3 goToDashboardButton">Go to home</Link>
             </div>
         </div>
     );
