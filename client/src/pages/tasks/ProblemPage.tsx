@@ -33,7 +33,7 @@ const ProblemPage: React.FC = () => {
     const [tests, setTests] = useState<Test[]>();
     const editorRef = useRef<any>(null);
     const [testResults, setTestResults] = useState<TestResult[]>();
-    const [isPopupVisible, setPopupVisible] = useState(true);
+    const [isPopupVisible, setPopupVisible] = useState(false);
 
     const getProblem = () => {
         axios.get(process.env.REACT_APP_API_ADDRESS + "/task/" + index)
