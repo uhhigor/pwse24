@@ -18,6 +18,9 @@ const testSchema = new Schema({
     textBlob: {
         type: Schema.Types.Buffer,
         //required: true
+    },
+    body:{
+        type:String
     }
 });
 
