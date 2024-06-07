@@ -21,11 +21,10 @@ export const Home = () => {
 
     return (
         <>
-
             <div className="home-container">
                 <div className="row home-header">
                     <div className=" col-1">
-                        <CgLogOut size={80} className="logOuticon" onClick={logOut}/>
+                        <CgLogOut size={80} onClick={logOut}/>
                     </div>
 
                     <div className="col-11">
