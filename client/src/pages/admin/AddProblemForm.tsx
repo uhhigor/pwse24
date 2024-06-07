@@ -6,7 +6,7 @@ export const AddProblemForm = ({setTasks, setOldTests}: any) => {
 
     const [name, setName] = useState("");
     const [difficulty, setDifficulty] = useState("Easy");
-    const [deadline, setDeadline] = useState("");
+    const [language, setLanguage] = useState("Python");
     const [description, setDescription] = useState("");
     const [numberOfTests, setNumberOfTests] = useState(1);
     const [tests, setTests] = useState([{'input': '', 'output': ''}]);
@@ -24,7 +24,7 @@ export const AddProblemForm = ({setTasks, setOldTests}: any) => {
         axios.post(process.env.REACT_APP_API_ADDRESS + "/task/", {
             name: name,
             difficulty: difficulty,
-            deadline: deadline,
+            language: language,
             description: description,
             tests: tests
         })
@@ -71,21 +71,25 @@ export const AddProblemForm = ({setTasks, setOldTests}: any) => {
                             </select>
                         </form>
                         <form className="row" action="">
-                            <label className="col-3" htmlFor="deadline">Deadline: </label>
-                            <input
-                            onChange={(e) => setDeadline(e.target.value)}
-                            value={deadline}
-                            className="col-8" type="date" id="deadline" name="deadline"/>
-                        </form>
-                        
-                        <form className="row" action="">
-                            <label className="col-3" htmlFor="testNo">Test No.: </label>
-                            <input onChange={handleTestsNumberChange} className="col-8" min={0} max={10} type="number" id="testNo" name="testNo"/>
+                            <label className="col-3" htmlFor="languageSelect">Language: </label>
+                            <select
+                                onChange={(e) => setLanguage(e.target.value)}
+                                value={language}
+                                className="col-8" id="languageSelect" name="language">
+                                <option value="Python">Python</option>
+                                <option value="JavaScript">JavaScript</option>
+                            </select>
                         </form>
 
                         <form className="row" action="">
-                        {
-                            [...Array(numberOfTests)].map((_, index) => {
+                            <label className="col-3" htmlFor="testNo">Test No.: </label>
+                            <input onChange={handleTestsNumberChange} className="col-8" min={0} max={10} type="number"
+                                   id="testNo" name="testNo"/>
+                        </form>
+
+                        <form className="row" action="">
+                            {
+                                [...Array(numberOfTests)].map((_, index) => {
                                 return (
                                     <React.Fragment key={`addtests${index}`}>
                                         <label className="col-3" htmlFor="input1">{`Test ${index + 1}: `}</label>

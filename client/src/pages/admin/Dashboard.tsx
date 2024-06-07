@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react"
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {FaCode, FaClipboardList, FaUser, FaPencil, FaTrashCan} from "react-icons/fa6";
 import '../../style/Dashboard.css'
 import axios from "axios";
@@ -29,6 +29,16 @@ export const Dashboard = () => {
         axios.get(process.env.REACT_APP_API_ADDRESS + "/task/")
             .then((response) => {
                 setTasks(response.data);
+            })
+            .catch((err) => {
+                console.error(err);
+                if (err.response.status === 401) {
+                    navigate('/login');
+                }
+            });
+        axios.get(process.env.REACT_APP_API_ADDRESS + "/tasktest/")
+            .then((response) => {
+                setTests(response.data);
             })
             .catch((err) => {
                 console.error(err);
@@ -123,7 +133,7 @@ export const Dashboard = () => {
                                 <th scope='col'>Name</th>
                                 <th scope='col'>Difficulty</th>
                                 <th scope='col'>Date</th>
-                                <th scope='col'>Deadline</th>
+                                <th scope='col'>Language</th>
                                 <th scope='col'></th>
                             </tr>
                             </thead>
@@ -131,12 +141,6 @@ export const Dashboard = () => {
                                 {
                                     tasks.map((task: any, index: number) => {
                                         const date = new Date(task.date).toLocaleDateString('en-GB', {
-                                            day: '2-digit',
-                                            month: '2-digit',
-                                            year: 'numeric'
-                                        });
-                                        
-                                        const deadline = new Date(task.deadline).toLocaleDateString('en-GB', {
                                             day: '2-digit',
                                             month: '2-digit',
                                             year: 'numeric'
@@ -155,7 +159,7 @@ export const Dashboard = () => {
                                                 <td>{task.name}</td>
                                                 <td>{task.difficulty}</td>
                                                 <td>{date}</td>
-                                                <td>{deadline}</td>
+                                                <td>{task.language}</td>
                                                 <td>
                                                     <FaPencil 
                                                      className="edit"
@@ -181,7 +185,7 @@ export const Dashboard = () => {
                         </table>
                     </div>
                     <div className="row">
-                        <div className="col-8">
+                        <div className="col-4">
                             <div
                                 data-bs-toggle="modal"
                                 data-bs-target="#addProblem"
@@ -189,12 +193,16 @@ export const Dashboard = () => {
                                 Add Problem
                             </div>
                         </div>
+                        <div className="col-5">
+                            <Link to="/tasks" className="btn submitButtonPP">Tasks</Link>
+                        </div>
+
                     </div>
                 </div>
 
                 <div className="col-3">
                     <div className="row">
-                        <button
+                    <button
                             disabled={description === ''}
                             className="btn col-5 tab-btn m-1 ms-2"
                             onClick={() => {
@@ -249,6 +257,7 @@ export const Dashboard = () => {
             <TestPopup test={testInfo}/>
             <AddProblemForm setTasks={setTasks} setOldTests={setTests}/>
             <EditProblemForm setTasks={setTasks} setOldTests={setTests} editingTask={editingTask} existingTests={tests} />
+
         </div>
     )
 }
