@@ -20,10 +20,10 @@ const ResultsPopup: React.FC<ResultsPopupProps> = ({ testResults, isOpen, onClos
     return (
         <Popup open={isOpen} closeOnDocumentClick onClose={onClose} modal nested>
             <StyledPopup>
-                <h2>Test Results:</h2>
+                <h1>Test Results:</h1>
                 {testResults?.map((result) => (
                     <p key={result._id}>
-                        {result.body} - {result.passed ? 'Passed' : 'Failed'}
+                    Test: {result.passed ? 'Passed' : 'Failed'}
                     </p>
                 ))}
                 <CloseButton onClick={onClose}>Close</CloseButton>

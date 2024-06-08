@@ -34,6 +34,7 @@ const ProblemPage: React.FC = () => {
     const editorRef = useRef<any>(null);
     const [testResults, setTestResults] = useState<TestResult[]>();
     const [isPopupVisible, setPopupVisible] = useState(false);
+    const [score, setScore] = useState(0);
 
     const getProblem = () => {
         axios.get(process.env.REACT_APP_API_ADDRESS + "/task/" + index)
@@ -57,17 +58,48 @@ const ProblemPage: React.FC = () => {
     const submitSolution = () => {
         const solution = editorRef.current?.getValue();
         let data = {
-            language: task?.language.toLowerCase(),
             solution: solution,
-            taskID: task?._id
+            taskID: task?._id,
+            userEmail: localStorage.getItem("email")
         }
         axios.post(process.env.REACT_APP_API_ADDRESS + '/tester/check', data)
             .then((response) => {
                 setTestResults(response.data);
+                getScore(response.data);
                 setPopupVisible(true);
             }).catch((err) => {
             console.log("Error: " + err.response.data);
         });
+    }
+
+    const getScore = (testResults: TestResult[]) => {
+        let score = 0;
+        testResults.forEach((test) => {
+            if (test.passed) {
+                score++;
+            }
+        });
+        setScore(10/testResults.length * score);
+    }
+
+    function saveSolution() {
+        const solution = editorRef.current?.getValue();
+        let data = {
+            userEmail: localStorage.getItem("email"),
+            textBlob: solution,
+            score: score
+        }
+        axios.post(process.env.REACT_APP_API_ADDRESS + `/solution/task/` + task?._id, data)
+            .then((response) => {
+                console.log("Solution saved");
+            }).catch((err) => {
+            console.log("Error: " + err.response.data);
+        });
+    }
+
+    const ssbuttonClicked = () => {
+        submitSolution()
+        saveSolution()
     }
 
     useEffect(() => {
@@ -99,7 +131,7 @@ const ProblemPage: React.FC = () => {
                         <CodeEditor ref={editorRef} language={task?.language.toLowerCase()} />
                     </div>
                     <div className="row">
-                        <button className="btn btn-lg mt-4 ms-2 submitButtonPP" onClick={submitSolution}>Submit</button>
+                        <button className="btn btn-lg mt-4 ms-2 submitButtonPP" onClick={ssbuttonClicked}>Save & Submit</button>
                         <button className="btn btn-lg mt-4 ms-2 submitButtonPP" onClick={goBack}>Go Back</button>
                     </div>
                 </div>

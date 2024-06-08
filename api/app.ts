@@ -25,10 +25,13 @@ let testerRouter = require('./routes/tester.ts')
 
 
 const app = express();
-app.use(cors({
+
+const corsOptions = {
     origin: ['http://localhost:5005'],
     credentials: true,
-}));
+};
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
 
 app.use(logger('dev'));
 app.use(express.json());
