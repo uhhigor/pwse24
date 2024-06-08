@@ -90,10 +90,14 @@ import unittest
 from solution import solution
 class Testing(unittest.TestCase):
     def test(self):
-        self.assertTrue(solution(${given}),${expected})
+        self.assertEqual(solution(${given}),${expected})
 if __name__ == '__main__':
     unittest.main()`
-    return ['sh','-c',`echo "${main}" > main.py && echo "${solution}" > solution.py && python -m unittest -v main.py`]
+    main = main.replace(/"/g,'\\"')
+    main = main.replace(/false/g,'False')
+    main = main.replace(/true/g,'True')
+    solution = solution.replace(/"/g,'\\"')
+    return ['sh','-c',`echo "${main}" > main.py && echo "${solution}" > solution.py && python -m unittest -vv main.py`]
 })
 export let javascript = createTester("jstest:latest",(given,expected,solution) => {
     let main = `
@@ -105,7 +109,9 @@ export let javascript = createTester("jstest:latest",(given,expected,solution) =
     });
 })
     `
-    console.log(main)
+    main = main.replace(/"/g,'\\"')
+
+    solution = solution.replace(/"/g,'\\"')
     return ['sh', '-c',`echo "${main}" > main.test.js && echo "${solution}" > solution.js && npx jest main.test.js`]
 })
 

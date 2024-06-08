@@ -52,7 +52,8 @@ router.post("/check",async (req:any,res:any) => {
 
     let tests = testsT.map((t:any) => {
         console.log("Map")
-        console.log(t.body)
+        console.log(t.givenInput)
+        console.log(t.expectedOutput)
         return {
             _id: t._id,
             givenInput: t.givenInput,
@@ -65,6 +66,8 @@ router.post("/check",async (req:any,res:any) => {
         if(typeof func == 'function') {
             let {body,passed} = await func(test.givenInput,test.expectedOutput, solution)
             test.body = body;
+            console.log("test result")
+            console.log(body)
             test.passed = passed
         } else res.status(StatusCodes.NOT_FOUND).send(func)
         return test;
