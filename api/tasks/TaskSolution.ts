@@ -4,11 +4,13 @@ const Schema = mongoose.Schema;
 const taskSolutionSchema = new Schema({
     user: {
         type: Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'User',
+        required: true
     },
     task: {
         type: Schema.Types.ObjectId,
-        ref: 'Task'
+        ref: 'Task',
+        required: true
     },
     textBlob: {
         type: Schema.Types.Buffer,
