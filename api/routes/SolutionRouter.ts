@@ -46,6 +46,23 @@ router.get('/:id', function (req: any, res: any, next: any) {
     });
 });
 
+
+// GET task solution by user id and task id
+router.get('/user/:userid/task/:taskid', function (req: any, res: any, next: any) {
+    if (!mongoose.isValidObjectId(req.params.userid) || !mongoose.isValidObjectId(req.params.taskid)) {
+        return res.status(StatusCodes.BAD_REQUEST).send("Invalid id");
+    }
+    TaskSolution.findOne({userId: req.params.userid, taskId: req.params.taskid}).then((solution) => {
+        if (solution) {
+            return res.status(StatusCodes.OK).send(solution);
+        } else {
+            return res.status(StatusCodes.NOT_FOUND).send("Solution not found");
+        }
+    }).catch((err) => {
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(err.message);
+    });
+});
+
 // POST add task solution to task
 router.post('/task/:taskid', async function (req: any, res: any, next: any) {
     try {
