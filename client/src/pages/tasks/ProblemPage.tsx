@@ -38,6 +38,8 @@ const ProblemPage: React.FC = () => {
 
     const user = JSON.parse(localStorage.getItem("user") || '{}');
 
+    let solutionId = "";
+
     useEffect(() => {
         getProblem();
         getTests();
@@ -102,12 +104,22 @@ const ProblemPage: React.FC = () => {
             textBlob: solution,
             score: score
         };
-
-        try {
-            await axios.post(`${process.env.REACT_APP_API_ADDRESS}/solution/task/${task?._id}`, data);
-            console.log("Solution saved");
-        } catch (err: any) {
-            console.log("Error: " + err.response.data);
+        console.log("SolutionId: " + solutionId);
+        if (solutionId !== "") {
+            try {
+                await axios.put(`${process.env.REACT_APP_API_ADDRESS}/solution/${solutionId}`, data);
+                console.log("Solution updated");
+            } catch (err: any) {
+                console.log("Error: " + err.response.data);
+            }
+            return;
+        } else {
+            try {
+                await axios.post(`${process.env.REACT_APP_API_ADDRESS}/solution/task/${task?._id}`, data);
+                console.log("Solution saved");
+            } catch (err: any) {
+                console.log("Error: " + err.response.data);
+            }
         }
     }
 
@@ -119,10 +131,11 @@ const ProblemPage: React.FC = () => {
     const getSolution = async () => {
         try {
             const response = await axios.get(`${process.env.REACT_APP_API_ADDRESS}/solution/user/${user.id}/task/${task?._id}`);
-            console.log(response);
             let str = bufferToString(response.data.textBlob.data);
+            solutionId = response.data._id;
             editorRef.current?.setValue(str);
         } catch (err: any) {
+            solutionId = "";
             console.log("Error: " + err);
         }
     }
