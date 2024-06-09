@@ -4,6 +4,7 @@ import "../../style/ProblemPage.css";
 import CodeEditor from "../../CodeEditor";
 import axios from 'axios';
 import ResultsPopup from "./ResultsPopup";
+import codeEditor from "../../CodeEditor";
 
 type Task = {
     _id: string;
@@ -97,7 +98,7 @@ const ProblemPage: React.FC = () => {
     const saveSolution = async () =>{
         const solution = editorRef.current?.getValue();
         let data = {
-            userId: user.id,
+            user: user.id,
             textBlob: solution,
             score: score
         };
@@ -118,12 +119,17 @@ const ProblemPage: React.FC = () => {
     const getSolution = async () => {
         try {
             const response = await axios.get(`${process.env.REACT_APP_API_ADDRESS}/solution/user/${user.id}/task/${task?._id}`);
-            editorRef.current?.setValue(response.data.textBlob);
+            console.log(response);
+            let str = bufferToString(response.data.textBlob.data);
+            editorRef.current?.setValue(str);
         } catch (err: any) {
-            console.log("Error: " + err.response.data);
+            console.log("Error: " + err);
         }
     }
-
+    const bufferToString = (array: number[]) => {
+        const decoder = new TextDecoder();
+        return decoder.decode(new Uint8Array(array));
+    }
     const goBack = () => {
         window.history.back();
     }

@@ -22,7 +22,7 @@ router.get('/task/:taskid', function (req: any, res: any, next: any) {
     if (!mongoose.isValidObjectId(taskId)) {
         return res.status(StatusCodes.BAD_REQUEST).send("Invalid id");
     }
-    TaskSolution.find({taskId: taskId}).then((solutions) => {
+    TaskSolution.find({task: taskId}).then((solutions) => {
         if (!solutions) return res.status(StatusCodes.NOT_FOUND).send("Solutions not found");
         return res.status(StatusCodes.OK).send(solutions);
     }).catch((err) => {
@@ -66,7 +66,7 @@ router.get('/user/:userid/task/:taskid', function (req: any, res: any, next: any
     if (!mongoose.isValidObjectId(req.params.userid) || !mongoose.isValidObjectId(req.params.taskid)) {
         return res.status(StatusCodes.BAD_REQUEST).send("Invalid id");
     }
-    TaskSolution.findOne({user: req.params.userid, taskId: req.params.taskid}).then((solution) => {
+    TaskSolution.findOne({user: req.params.userid, task: req.params.taskid}).then((solution) => {
         if (solution) {
             return res.status(StatusCodes.OK).send(solution);
         } else {
@@ -85,16 +85,14 @@ router.post('/task/:taskid', async function (req: any, res: any, next: any) {
             return res.status(StatusCodes.BAD_REQUEST).send("Invalid id");
         }
 
-        const { userEmail, score, textBlob } = req.body;
+        const { user, textBlob, score } = req.body;
 
-        const user = await User.findOne().where('email').equals(userEmail).select('_id').exec();
-
-        if (!user) {
-            return res.status(StatusCodes.NOT_FOUND).send("User not found");
+        console.log("AAAA " + user);
+        if (!mongoose.isValidObjectId(user)) {
+            return res.status(StatusCodes.BAD_REQUEST).send("Invalid user id");
         }
 
-        let userId = user.get('_id')
-        const solution = await TaskSolution.create({user: userId, task: taskId, textBlob: textBlob, score: score});
+        const solution = await TaskSolution.create({user: user, task: taskId, textBlob: textBlob, score: score});
         if (solution) {
             return res.status(StatusCodes.OK).send(solution);
         } else {
@@ -104,6 +102,29 @@ router.post('/task/:taskid', async function (req: any, res: any, next: any) {
         console.log("CCCC " + err.message);
         return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(err.message);
     }
+});
+
+// PUT update task solution
+
+router.put('/:id', async function (req: any, res: any, next: any) {
+    if (!mongoose.isValidObjectId(req.params.id)) {
+        return res.status(StatusCodes.BAD_REQUEST).send("Invalid id");
+    }
+
+    const { user, textBlob, score } = req.body;
+    if (!mongoose.isValidObjectId(user)) {
+        return res.status(StatusCodes.BAD_REQUEST).send("Invalid user id");
+    }
+
+    TaskSolution.findByIdAndUpdate(req.params.id, {user: user, textBlob: textBlob, score: score}, {new: true}).then((solution) => {
+        if (solution) {
+            return res.status(StatusCodes.OK).send(solution);
+        } else {
+            return res.status(StatusCodes.NOT_FOUND).send("Solution not found");
+        }
+    }).catch((err) => {
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(err.message);
+    });
 });
 
 // DELETE task solution

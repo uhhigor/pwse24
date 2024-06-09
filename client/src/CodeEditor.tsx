@@ -19,7 +19,10 @@ const CodeEditor = forwardRef((props: CodeEditorProps, ref) => {
     useImperativeHandle(ref, () => ({
         getValue: () => {
             return editorRef.current?.getValue() || '';
-        }
+        },
+        setValue: (value: string) => {
+            editorRef.current?.setValue(value);
+        },
     }));
 
     useEffect(() => {
