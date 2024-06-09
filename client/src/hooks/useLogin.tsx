@@ -18,7 +18,7 @@ export const useLogin = () => {
       };
       axios.post(process.env.REACT_APP_API_ADDRESS + "/auth/login", data)
           .then((response: any) => {
-            localStorage.setItem("user", JSON.stringify(response));
+            localStorage.setItem("user", JSON.stringify({"email": response.data.email, "role": response.data.role}));
             localStorage.setItem("email", data.email);
             dispatch({type: 'LOGIN', payload: response});
             setIsLoading(false);
