@@ -12,11 +12,13 @@ import ProfileManagement from './pages/auth/ProfileManagement';
 import { Home } from './pages/other/Home';
 import { useAuthContext } from './hooks/useAuthContext';
 import { Ranking } from './pages/tasks/Ranking';
+import Submissions from "./pages/tasks/Submissions";
 
 axios.defaults.withCredentials = true;
 const App: React.FC = () => {
   const { state }: any = useAuthContext();
-  const { user } = state.user ? state : { "user": JSON.parse(localStorage.getItem('user')!) };
+  const { user } = state.user ? { "user": {"email": state.user.data.email, "role": state.user.data.role} } :
+                               { "user": JSON.parse(localStorage.getItem('user')!) };
 
   return (
     <BrowserRouter>
@@ -32,6 +34,7 @@ const App: React.FC = () => {
               <Route path="/profileManagement/:email" element={ user ? <ProfileManagement/> : <Navigate to="/" />} />
               <Route path="/home" element={ user ? <Home/> : <Navigate to="/" />} />
               <Route path="/ranking" element={ user ? <Ranking/> : <Navigate to="/" />} />
+                <Route path="/submissions" element={ user ? <Submissions/> : <Navigate to="/" />} />
             </Routes>
           </header>
       </div>

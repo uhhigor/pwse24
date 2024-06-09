@@ -56,8 +56,18 @@ export const Home = () => {
                         >Problems</span>
                     </div>
                     <div className="option col-5">
-                        <FaRegFileCode/>
-                        <span>Submissions</span>
+                        <FaRegFileCode
+                        onClick={() => {
+                            navigate("/submissions")
+                        }
+                        }/>
+                        <span
+
+                            onClick={() => {
+                                navigate("/submissions")
+                            }
+                            }
+                        >Submissions</span>
                     </div>
                     <div
                         className="option col-5">
