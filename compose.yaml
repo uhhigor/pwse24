@@ -16,6 +16,7 @@ services:
           target: /home/node/app/package.json
     env_file:
       - ./api/pwse_api.env
+      
   frontend:
     build: ./client
     ports:
