@@ -30,6 +30,20 @@ router.get('/task/:taskid', function (req: any, res: any, next: any) {
     });
 });
 
+// GET all tasks solutions by user id
+router.get('/user/:userid', function (req: any, res: any, next: any) {
+    let userId = req.params.userId;
+    if (!mongoose.isValidObjectId(userId)) {
+        return res.status(StatusCodes.BAD_REQUEST).send("Invalid id");
+    }
+    TaskSolution.find({userId: userId}).then((solutions) => {
+        if (!solutions) return res.status(StatusCodes.NOT_FOUND).send("Solutions not found");
+        return res.status(StatusCodes.OK).send(solutions);
+    }).catch((err) => {
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(err.message);
+    });
+});
+
 // GET task solution by id
 router.get('/:id', function (req: any, res: any, next: any) {
     if (!mongoose.isValidObjectId(req.params.id)) {
@@ -38,6 +52,23 @@ router.get('/:id', function (req: any, res: any, next: any) {
     TaskSolution.findOne({email: req.params.email}).then((solution) => {
         if (solution) {
             return solution;
+        } else {
+            return res.status(StatusCodes.NOT_FOUND).send("Solution not found");
+        }
+    }).catch((err) => {
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(err.message);
+    });
+});
+
+
+// GET task solution by user id and task id
+router.get('/user/:userid/task/:taskid', function (req: any, res: any, next: any) {
+    if (!mongoose.isValidObjectId(req.params.userid) || !mongoose.isValidObjectId(req.params.taskid)) {
+        return res.status(StatusCodes.BAD_REQUEST).send("Invalid id");
+    }
+    TaskSolution.findOne({userId: req.params.userid, taskId: req.params.taskid}).then((solution) => {
+        if (solution) {
+            return res.status(StatusCodes.OK).send(solution);
         } else {
             return res.status(StatusCodes.NOT_FOUND).send("Solution not found");
         }
