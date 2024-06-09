@@ -4,18 +4,16 @@ import {useNavigate} from "react-router";
 import {getEmail} from "../../UserData";
 import {CgLogOut} from "react-icons/cg";
 import axios from "axios";
+import { useLogout } from "../../hooks/useLogout";
 
 export const Home = () => {
     let navigate = useNavigate();
 
-    const deleteCookie = (name: string, path: string = '/'): void => {
-        document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;'
-    };
+    const { logout } = useLogout();
+
     const logOut = (): void => {
-        delete axios.defaults.headers.common['Authorization'];
-        deleteCookie('token');
-        localStorage.clear();
-        window.location.href = '/login';
+        document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;'
+        logout();
     };
 
 
@@ -58,8 +56,18 @@ export const Home = () => {
                         >Problems</span>
                     </div>
                     <div className="option col-5">
-                        <FaRegFileCode/>
-                        <span>Submissions</span>
+                        <FaRegFileCode
+                        onClick={() => {
+                            navigate("/submissions")
+                        }
+                        }/>
+                        <span
+
+                            onClick={() => {
+                                navigate("/submissions")
+                            }
+                            }
+                        >Submissions</span>
                     </div>
                     <div
                         className="option col-5">

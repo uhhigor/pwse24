@@ -44,7 +44,7 @@ let getTask = async (id:any) => {
 // taskID
 // userID
 router.post("/check",async (req:any,res:any) => {
-    const {solution,taskID,userEmail} = req.body;
+    const {solution,taskID,userId} = req.body;
 
     let task = await getTask(taskID).catch((e:any) => res.status(StatusCodes.NOT_FOUND).send(e));
     let testsT = await getTests(taskID).catch((e:any) => res.status(StatusCodes.NOT_FOUND).send(e));

@@ -31,7 +31,7 @@ router.get('/task/:taskid', function (req: any, res: any, next: any) {
 });
 
 // GET all tasks solutions by user id
-router.get('/user/:userid', function (req: any, res: any, next: any) {
+router.get('/user/:userId', function (req: any, res: any, next: any) {
     let userId = req.params.userId;
     if (!mongoose.isValidObjectId(userId)) {
         return res.status(StatusCodes.BAD_REQUEST).send("Invalid id");
@@ -94,9 +94,7 @@ router.post('/task/:taskid', async function (req: any, res: any, next: any) {
         }
 
         let userId = user.get('_id')
-        console.log("BBBB " + userId);
         const solution = await TaskSolution.create({user: userId, task: taskId, textBlob: textBlob, score: score});
-        console.log("AAAA " + solution);
         if (solution) {
             return res.status(StatusCodes.OK).send(solution);
         } else {
