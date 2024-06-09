@@ -16,7 +16,8 @@ import { Ranking } from './pages/tasks/Ranking';
 axios.defaults.withCredentials = true;
 const App: React.FC = () => {
   const { state }: any = useAuthContext();
-  const { user } = state.user ? state : { "user": JSON.parse(localStorage.getItem('user')!) };
+  const { user } = state.user ? { "user": {"email": state.user.data.email, "role": state.user.data.role} } :
+                               { "user": JSON.parse(localStorage.getItem('user')!) };
 
   return (
     <BrowserRouter>
