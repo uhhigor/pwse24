@@ -85,14 +85,23 @@ router.post('/task/:taskid', async function (req: any, res: any, next: any) {
             return res.status(StatusCodes.BAD_REQUEST).send("Invalid id");
         }
 
-        const { userId, score, textBlob } = req.body;
-        const solution = await TaskSolution.create({ userId, taskId, textBlob, score });
+        const { userEmail, score, textBlob } = req.body;
+
+        const user = await User.findOne().where('email').equals(userEmail).select('_id').exec();
+
+        if (!user) {
+            return res.status(StatusCodes.NOT_FOUND).send("User not found");
+        }
+
+        let userId = user.get('_id')
+        const solution = await TaskSolution.create({user: userId, task: taskId, textBlob: textBlob, score: score});
         if (solution) {
             return res.status(StatusCodes.OK).send(solution);
         } else {
             return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send("Error while saving solution");
         }
     } catch (err : any ) {
+        console.log("CCCC " + err.message);
         return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(err.message);
     }
 });

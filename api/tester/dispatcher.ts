@@ -38,6 +38,10 @@ let createTester =  (image: string, command: DockerCommand) => {
                 AttachStdin: true,
                 Tty: true,
             }, (err: any, container: any) => {
+                if (err) {
+                    reject(err);
+                    return;
+                }
                 container.start((err: any, start: any) => {
                     container.exec({
                         Cmd: command(given,expected, solution),
