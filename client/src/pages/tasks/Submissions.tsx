@@ -3,13 +3,13 @@ import axios from "axios";
 import {Link, useNavigate} from "react-router-dom";
 
 interface Submission {
-    taskId: string;
+    task: string;
     score: number;
 }
 
 interface Task {
-    id: string;
-    title: string;
+    _id: string;
+    name: string;
 }
 
 function Submissions() {
@@ -24,8 +24,11 @@ function Submissions() {
             const submissionsResponse = await axios.get(process.env.REACT_APP_API_ADDRESS + "/solution/user/" + user.id);
             const submissionsData: Submission[] = submissionsResponse.data;
             setSubmissions(submissionsData);
-
-            const taskIds = submissionsData.map(submission => submission.taskId);
+            const taskIds = []
+            for (const submission of submissionsData) {
+                taskIds.push(submission.task);
+            }
+            console.log(taskIds)
             await getTasks(taskIds);
         } catch (error) {
             console.error("Error fetching data: ", error);
@@ -38,11 +41,11 @@ function Submissions() {
             const tasksData: Task[] = [];
 
             for (const taskId of taskIds) {
-                const taskResponse = await axios.get(process.env.REACT_APP_API_ADDRESS + "/tasks/" + taskId);
+                const taskResponse = await axios.get(process.env.REACT_APP_API_ADDRESS + "/task/" + taskId);
                 const taskData: Task = taskResponse.data;
                 tasksData.push(taskData);
             }
-
+            console.log(tasksData)
             setTasks(tasksData);
         } catch (error) {
             console.error("Error fetching tasks: ", error);
@@ -63,7 +66,6 @@ function Submissions() {
                             <h2>Submissions</h2>
                             <div className='table-responsive'>
                                 <table className=" table table-borderless">
-                                    <table>
                                         <thead>
                                         <tr>
                                             <th>Task Title</th>
@@ -73,12 +75,11 @@ function Submissions() {
                                         <tbody>
                                         {submissions.map((submission, index) => (
                                             <tr key={index}>
-                                                <td>{tasks.find(task => task.id === submission.taskId)?.title}</td>
+                                                <td>{tasks.find(task => task._id === submission.task)?.name}</td>
                                                 <td>{submission.score}</td>
                                             </tr>
                                         ))}
                                         </tbody>
-                                    </table>
                                 </table>
                             </div>
                         </div>

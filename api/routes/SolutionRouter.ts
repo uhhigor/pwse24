@@ -36,7 +36,7 @@ router.get('/user/:userId', function (req: any, res: any, next: any) {
     if (!mongoose.isValidObjectId(userId)) {
         return res.status(StatusCodes.BAD_REQUEST).send("Invalid id");
     }
-    TaskSolution.find({userId: userId}).then((solutions) => {
+    TaskSolution.find({user: userId}).then((solutions) => {
         if (!solutions) return res.status(StatusCodes.NOT_FOUND).send("Solutions not found");
         return res.status(StatusCodes.OK).send(solutions);
     }).catch((err) => {
@@ -66,7 +66,7 @@ router.get('/user/:userid/task/:taskid', function (req: any, res: any, next: any
     if (!mongoose.isValidObjectId(req.params.userid) || !mongoose.isValidObjectId(req.params.taskid)) {
         return res.status(StatusCodes.BAD_REQUEST).send("Invalid id");
     }
-    TaskSolution.findOne({userId: req.params.userid, taskId: req.params.taskid}).then((solution) => {
+    TaskSolution.findOne({user: req.params.userid, taskId: req.params.taskid}).then((solution) => {
         if (solution) {
             return res.status(StatusCodes.OK).send(solution);
         } else {
