@@ -12,6 +12,7 @@ import ProfileManagement from './pages/auth/ProfileManagement';
 import { Home } from './pages/other/Home';
 import { useAuthContext } from './hooks/useAuthContext';
 import { Ranking } from './pages/tasks/Ranking';
+import Submissions from "./pages/tasks/Submissions";
 
 axios.defaults.withCredentials = true;
 const App: React.FC = () => {
@@ -33,6 +34,7 @@ const App: React.FC = () => {
               <Route path="/profileManagement/:email" element={ user ? <ProfileManagement/> : <Navigate to="/" />} />
               <Route path="/home" element={ user ? <Home/> : <Navigate to="/" />} />
               <Route path="/ranking" element={ user ? <Ranking/> : <Navigate to="/" />} />
+                <Route path="/submissions" element={ user ? <Submissions/> : <Navigate to="/" />} />
             </Routes>
           </header>
       </div>

@@ -31,7 +31,7 @@ router.get('/task/:taskid', function (req: any, res: any, next: any) {
 });
 
 // GET all tasks solutions by user id
-router.get('/user/:userid', function (req: any, res: any, next: any) {
+router.get('/user/:userId', function (req: any, res: any, next: any) {
     let userId = req.params.userId;
     if (!mongoose.isValidObjectId(userId)) {
         return res.status(StatusCodes.BAD_REQUEST).send("Invalid id");
