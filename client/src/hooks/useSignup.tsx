@@ -20,7 +20,7 @@ export const useSignup = () => {
           surname: surname
       };
       axios.post(process.env.REACT_APP_API_ADDRESS + "/auth/register", data).then((response: any) => {
-        localStorage.setItem("user", JSON.stringify({"email": response.data.email, "role": response.data.role}));
+        localStorage.setItem("user", JSON.stringify({"email": response.data.email, "role": response.data.role, "id": response._id}));
         localStorage.setItem("email", data.email);
         dispatch({type: 'LOGIN', payload: response})
         setIsLoading(false)

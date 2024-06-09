@@ -26,50 +26,62 @@ type TestResult = {
     passed: boolean;
 }
 
-
 const ProblemPage: React.FC = () => {
-    let index = useParams().id;
-    const [task, setTask] = useState<Task>();
-    const [tests, setTests] = useState<Test[]>();
+    let { id: index } = useParams();
+    const [task, setTask] = useState<Task | null>(null);
+    const [tests, setTests] = useState<Test[]>([]);
     const editorRef = useRef<any>(null);
-    const [testResults, setTestResults] = useState<TestResult[]>();
+    const [testResults, setTestResults] = useState<TestResult[]>([]);
     const [isPopupVisible, setPopupVisible] = useState(false);
     const [score, setScore] = useState(0);
 
-    const getProblem = () => {
-        axios.get(process.env.REACT_APP_API_ADDRESS + "/task/" + index)
-            .then((response) => {
-                setTask(response.data);
-            }).catch((err) => {
+    const user = JSON.parse(localStorage.getItem("user") || '{}');
+
+    useEffect(() => {
+        getProblem();
+        getTests();
+    }, [index]);
+
+    useEffect(() => {
+        if (task) {
+            getSolution();
+        }
+    }, [task]);
+
+    const getProblem = async () => {
+        try {
+            const response = await axios.get(`${process.env.REACT_APP_API_ADDRESS}/task/${index}`);
+            setTask(response.data);
+        } catch (err: any) {
             console.log("Error: " + err.response.data);
-        });
+        }
     };
 
-    const getTests = () => {
-        axios.get(process.env.REACT_APP_API_ADDRESS + "/tasktest/task/" + index)
-            .then((response) => {
-                setTests(response.data);
-            }).catch((err) => {
+    const getTests = async () => {
+        try {
+            const response = await axios.get(`${process.env.REACT_APP_API_ADDRESS}/tasktest/task/${index}`);
+            setTests(response.data);
+        } catch (err: any) {
             console.log("Error: " + err.response.data);
-        });
+        }
     }
 
-
-    const submitSolution = () => {
+    const submitSolution = async () => {
         const solution = editorRef.current?.getValue();
         let data = {
             solution: solution,
             taskID: task?._id,
-            userEmail: localStorage.getItem("email")
-        }
-        axios.post(process.env.REACT_APP_API_ADDRESS + '/tester/check', data)
-            .then((response) => {
-                setTestResults(response.data);
-                getScore(response.data);
-                setPopupVisible(true);
-            }).catch((err) => {
+            userId: user.id
+        };
+
+        try {
+            const response = await axios.post(`${process.env.REACT_APP_API_ADDRESS}/tester/check`, data);
+            setTestResults(response.data);
+            getScore(response.data);
+            setPopupVisible(true);
+        } catch (err: any) {
             console.log("Error: " + err.response.data);
-        });
+        }
     }
 
     const getScore = (testResults: TestResult[]) => {
@@ -79,34 +91,38 @@ const ProblemPage: React.FC = () => {
                 score++;
             }
         });
-        setScore(10/testResults.length * score);
+        setScore(10 / testResults.length * score);
     }
 
-    function saveSolution() {
+    const saveSolution = async () =>{
         const solution = editorRef.current?.getValue();
         let data = {
-            userEmail: localStorage.getItem("email"),
+            userId: user.id,
             textBlob: solution,
             score: score
-        }
-        axios.post(process.env.REACT_APP_API_ADDRESS + `/solution/task/` + task?._id, data)
-            .then((response) => {
-                console.log("Solution saved");
-            }).catch((err) => {
+        };
+
+        try {
+            await axios.post(`${process.env.REACT_APP_API_ADDRESS}/solution/task/${task?._id}`, data);
+            console.log("Solution saved");
+        } catch (err: any) {
             console.log("Error: " + err.response.data);
-        });
+        }
     }
 
     const ssbuttonClicked = () => {
-        submitSolution()
-        saveSolution()
+        submitSolution();
+        saveSolution();
     }
 
-    useEffect(() => {
-        getProblem();
-        getTests();
-        console.log(isPopupVisible)
-    }, []);
+    const getSolution = async () => {
+        try {
+            const response = await axios.get(`${process.env.REACT_APP_API_ADDRESS}/solution/user/${user.id}/task/${task?._id}`);
+            editorRef.current?.setValue(response.data.textBlob);
+        } catch (err: any) {
+            console.log("Error: " + err.response.data);
+        }
+    }
 
     const goBack = () => {
         window.history.back();
@@ -121,9 +137,9 @@ const ProblemPage: React.FC = () => {
             <h1 className="my-5">{task?.name}</h1>
             <div className="row">
                 <p>Name: {task?.name}</p>
-                <p>Difficulty: {task?.difficulty} </p>
-                <p>Description: {task?.description} </p>
-                <p>Language: {task?.language} </p>
+                <p>Difficulty: {task?.difficulty}</p>
+                <p>Description: {task?.description}</p>
+                <p>Language: {task?.language}</p>
             </div>
             <div className="row codingRow mt-5">
                 <div className="col-md-8 mx-5">
@@ -138,7 +154,7 @@ const ProblemPage: React.FC = () => {
                 <div className="col-md-2">
                     <h2>Tests:</h2>
                     <div className="tests-container">
-                        {tests?.map((test, index) => (
+                        {tests.map((test, index) => (
                             <div key={index} className="test">
                                 <h5>Test {index + 1}</h5>
                                 <p>Input: {test.givenInput}</p>

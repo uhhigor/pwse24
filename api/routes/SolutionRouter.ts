@@ -85,16 +85,7 @@ router.post('/task/:taskid', async function (req: any, res: any, next: any) {
             return res.status(StatusCodes.BAD_REQUEST).send("Invalid id");
         }
 
-        const { userEmail, score, textBlob } = req.body;
-
-        const user = await User.findOne().where('email').equals(userEmail).select('_id').exec();
-
-        if (!user) {
-            return res.status(StatusCodes.NOT_FOUND).send("User not found");
-        }
-
-        let userId = user._id;
-        console.log(userId);
+        const { userId, score, textBlob } = req.body;
         const solution = await TaskSolution.create({ userId, taskId, textBlob, score });
         if (solution) {
             return res.status(StatusCodes.OK).send(solution);
